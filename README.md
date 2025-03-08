@@ -1,5 +1,7 @@
 <p align="center"><img src="/art/socialcard.png" alt="Social Card of Laravel Permission"></p>
 
+> Note: This package is customized for the needs of Devanox Private Limited projects. The original package can be found [here](https://github.com/spatie/laravel-permission) <br> Recommended to use the original package for general use cases.
+
 # Associate users with permissions and roles
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-permission.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-permission)

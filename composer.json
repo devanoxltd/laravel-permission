@@ -1,9 +1,9 @@
 {
-    "name": "spatie/laravel-permission",
+    "name": "devanoxltd/laravel-permission",
     "description": "Permission handling for Laravel 8.0 and up",
     "license": "MIT",
     "keywords": [
-        "spatie",
+        "devanoxltd",
         "laravel",
         "permission",
         "permissions",
@@ -14,13 +14,13 @@
     ],
     "authors": [
         {
-            "name": "Freek Van der Herten",
-            "email": "freek@spatie.be",
-            "homepage": "https://spatie.be",
+            "name": "Chetan",
+            "email": "contact@mrchetan.com",
+            "homepage": "https://devanox.com",
             "role": "Developer"
         }
     ],
-    "homepage": "https://github.com/spatie/laravel-permission",
+    "homepage": "https://github.com/devanoxltd/laravel-permission",
     "require": {
         "php": "^8.0",
         "illuminate/auth": "^8.12|^9.0|^10.0|^11.0|^12.0",
