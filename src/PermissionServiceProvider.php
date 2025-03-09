@@ -196,7 +196,7 @@ class PermissionServiceProvider extends ServiceProvider
                 ->keys()
                 ->whenEmpty(fn (Collection $collection) => $collection->push('Default'))
                 ->join(', '),
-            'Version' => InstalledVersions::getPrettyVersion('spatie/laravel-permission'),
+            'Version' => InstalledVersions::getPrettyVersion('devanoxltd/laravel-permission'),
         ]);
     }
 }
