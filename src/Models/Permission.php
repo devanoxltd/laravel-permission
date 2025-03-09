@@ -63,7 +63,7 @@ class Permission extends Model implements PermissionContract
             app(PermissionRegistrar::class)->pivotPermission,
             app(PermissionRegistrar::class)->pivotRole
         )
-        ->withPivot('permission_type');
+            ->withPivot('permission_type');
     }
 
     /**
@@ -78,7 +78,7 @@ class Permission extends Model implements PermissionContract
             app(PermissionRegistrar::class)->pivotPermission,
             config('permission.column_names.model_morph_key')
         )
-        ->withPivot('permission_type');
+            ->withPivot('permission_type');
     }
 
     /**
