@@ -54,6 +54,7 @@ class Role extends Model implements RoleContract
                 $attributes[$teamsKey] = getPermissionsTeamId();
             }
         }
+
         if (static::findByParam($params)) {
             throw RoleAlreadyExists::create($attributes['name'], $attributes['guard_name']);
         }
@@ -71,7 +72,8 @@ class Role extends Model implements RoleContract
             config('permission.table_names.role_has_permissions'),
             app(PermissionRegistrar::class)->pivotRole,
             app(PermissionRegistrar::class)->pivotPermission
-        );
+        )
+        ->withPivot('permission_type');
     }
 
     /**

@@ -88,11 +88,11 @@ trait HasPermissions
         );
 
         if (! app(PermissionRegistrar::class)->teams) {
-            return $relation;
+            return $relation->withPivot('permission_type');
         }
 
         $teamsKey = app(PermissionRegistrar::class)->teamsKey;
-        $relation->withPivot($teamsKey);
+        $relation->withPivot($teamsKey, 'permission_type');
 
         return $relation->wherePivot($teamsKey, getPermissionsTeamId());
     }
