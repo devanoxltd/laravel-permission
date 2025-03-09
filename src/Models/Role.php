@@ -73,7 +73,7 @@ class Role extends Model implements RoleContract
             app(PermissionRegistrar::class)->pivotRole,
             app(PermissionRegistrar::class)->pivotPermission
         )
-        ->withPivot('permission_type');
+            ->withPivot('permission_type');
     }
 
     /**
