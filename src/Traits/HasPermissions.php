@@ -392,29 +392,38 @@ trait HasPermissions
      * @param  string|int|array|Permission|Collection|\BackedEnum  $permissions
      * @return $this
      */
-    public function givePermissionTo(...$permissions)
+    public function givePermissionTo($permissionType, ...$permissions)
     {
+        if ($permissionType instanceof \BackedEnum) {
+            $permissionType = $permissionType->value;
+        } elseif (empty($permissionType)) {
+            $permissionType = 'all';
+        }
+
         $permissions = $this->collectPermissions($permissions);
 
         $model = $this->getModel();
-        $teamPivot = app(PermissionRegistrar::class)->teams && ! is_a($this, Role::class) ?
+        $pivotData = app(PermissionRegistrar::class)->teams && ! is_a($this, Role::class) ?
             [app(PermissionRegistrar::class)->teamsKey => getPermissionsTeamId()] : [];
+
+        $pivotData['permission_type'] = $permissionType;
 
         if ($model->exists) {
             $currentPermissions = $this->permissions->map(fn ($permission) => $permission->getKey())->toArray();
 
-            $this->permissions()->attach(array_diff($permissions, $currentPermissions), $teamPivot);
+            $this->permissions()->attach(array_diff($permissions, $currentPermissions), $pivotData);
             $model->unsetRelation('permissions');
         } else {
             $class = \get_class($model);
             $saved = false;
 
             $class::saved(
-                function ($object) use ($permissions, $model, $teamPivot, &$saved) {
+                function ($object) use ($permissions, $model, $pivotData, &$saved) {
                     if ($saved || $model->getKey() != $object->getKey()) {
                         return;
                     }
-                    $model->permissions()->attach($permissions, $teamPivot);
+
+                    $model->permissions()->attach($permissions, $pivotData);
                     $model->unsetRelation('permissions');
                     $saved = true;
                 }
@@ -447,15 +456,21 @@ trait HasPermissions
      * @param  string|int|array|Permission|Collection|\BackedEnum  $permissions
      * @return $this
      */
-    public function syncPermissions(...$permissions)
+    public function syncPermissions($permissionType, ...$permissions)
     {
+        if ($permissionType instanceof \BackedEnum) {
+            $permissionType = $permissionType->value;
+        } elseif (empty($permissionType)) {
+            $permissionType = 'all';
+        }
+
         if ($this->getModel()->exists) {
             $this->collectPermissions($permissions);
             $this->permissions()->detach();
             $this->setRelation('permissions', collect());
         }
 
-        return $this->givePermissionTo($permissions);
+        return $this->givePermissionTo($permissionType, $permissions);
     }
 
     /**

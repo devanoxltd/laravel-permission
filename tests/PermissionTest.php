@@ -13,7 +13,7 @@ class PermissionTest extends TestCase
     #[Test]
     public function it_get_user_models_using_with()
     {
-        $this->testUser->givePermissionTo($this->testUserPermission);
+        $this->testUser->givePermissionTo('all', $this->testUserPermission);
 
         $permission = app(Permission::class)::with('users')
             ->where($this->testUserPermission->getKeyName(), $this->testUserPermission->getKey())
@@ -57,9 +57,9 @@ class PermissionTest extends TestCase
     #[Test]
     public function it_has_user_models_of_the_right_class()
     {
-        $this->testAdmin->givePermissionTo($this->testAdminPermission);
+        $this->testAdmin->givePermissionTo('all', $this->testAdminPermission);
 
-        $this->testUser->givePermissionTo($this->testUserPermission);
+        $this->testUser->givePermissionTo('all', $this->testUserPermission);
 
         $this->assertCount(1, $this->testUserPermission->users);
         $this->assertTrue($this->testUserPermission->users->first()->is($this->testUser));

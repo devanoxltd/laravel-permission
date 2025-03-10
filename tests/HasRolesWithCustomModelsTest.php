@@ -36,7 +36,7 @@ class HasRolesWithCustomModelsTest extends HasRolesTest
     #[Test]
     public function it_doesnt_detach_permissions_when_soft_deleting()
     {
-        $this->testUserRole->givePermissionTo($this->testUserPermission);
+        $this->testUserRole->givePermissionTo('all', $this->testUserPermission);
 
         DB::enableQueryLog();
         $this->testUserRole->delete();

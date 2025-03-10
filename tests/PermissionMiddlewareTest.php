@@ -50,7 +50,7 @@ class PermissionMiddlewareTest extends TestCase
 
         Auth::guard('admin')->login($this->testAdmin);
 
-        $this->testAdmin->givePermissionTo($p1);
+        $this->testAdmin->givePermissionTo('all', $p1);
 
         $this->assertEquals(
             200,
@@ -64,7 +64,7 @@ class PermissionMiddlewareTest extends TestCase
 
         Auth::login($this->testUser);
 
-        $this->testUser->givePermissionTo($p2);
+        $this->testUser->givePermissionTo('all', $p2);
 
         $this->assertEquals(
             200,
@@ -91,7 +91,7 @@ class PermissionMiddlewareTest extends TestCase
 
         Passport::actingAsClient($this->testClient, ['*']);
 
-        $this->testClient->givePermissionTo($p1);
+        $this->testClient->givePermissionTo('all', $p1);
 
         $this->assertEquals(
             200,
@@ -126,7 +126,7 @@ class PermissionMiddlewareTest extends TestCase
     {
         Auth::login($this->testUser);
 
-        $this->testUser->givePermissionTo('edit-articles');
+        $this->testUser->givePermissionTo('all', 'edit-articles');
 
         $this->assertEquals(
             200,
@@ -144,7 +144,7 @@ class PermissionMiddlewareTest extends TestCase
 
         Passport::actingAsClient($this->testClient, ['*'], 'api');
 
-        $this->testClient->givePermissionTo('edit-posts');
+        $this->testClient->givePermissionTo('all', 'edit-posts');
 
         $this->assertEquals(
             200,
@@ -158,7 +158,7 @@ class PermissionMiddlewareTest extends TestCase
     {
         Auth::login($this->testUser);
 
-        $this->testUser->givePermissionTo('edit-articles');
+        $this->testUser->givePermissionTo('all', 'edit-articles');
 
         $this->assertEquals(
             200,
@@ -181,7 +181,7 @@ class PermissionMiddlewareTest extends TestCase
 
         Passport::actingAsClient($this->testClient, ['*']);
 
-        $this->testClient->givePermissionTo('edit-posts');
+        $this->testClient->givePermissionTo('all', 'edit-posts');
 
         $this->assertEquals(
             200,
@@ -214,7 +214,7 @@ class PermissionMiddlewareTest extends TestCase
     {
         Auth::login($this->testUser);
 
-        $this->testUser->givePermissionTo('edit-articles');
+        $this->testUser->givePermissionTo('all', 'edit-articles');
 
         $this->assertEquals(
             403,
@@ -232,7 +232,7 @@ class PermissionMiddlewareTest extends TestCase
 
         Passport::actingAsClient($this->testClient, ['*']);
 
-        $this->testClient->givePermissionTo('edit-posts');
+        $this->testClient->givePermissionTo('all', 'edit-posts');
 
         $this->assertEquals(
             403,
@@ -279,7 +279,7 @@ class PermissionMiddlewareTest extends TestCase
             $this->runMiddleware($this->permissionMiddleware, 'edit-articles')
         );
 
-        $this->testUserRole->givePermissionTo('edit-articles');
+        $this->testUserRole->givePermissionTo('all', 'edit-articles');
         $this->testUser->assignRole('testRole');
 
         $this->assertEquals(
@@ -303,7 +303,7 @@ class PermissionMiddlewareTest extends TestCase
             $this->runMiddleware($this->permissionMiddleware, 'edit-articles', null, true)
         );
 
-        $this->testClientRole->givePermissionTo('edit-posts');
+        $this->testClientRole->givePermissionTo('all', 'edit-posts');
         $this->testClient->assignRole('clientRole');
 
         $this->assertEquals(
@@ -377,7 +377,7 @@ class PermissionMiddlewareTest extends TestCase
     {
         Auth::login($this->testUser);
 
-        $this->testUser->givePermissionTo('edit-articles');
+        $this->testUser->givePermissionTo('all', 'edit-articles');
 
         $this->assertEquals(
             403,
@@ -395,7 +395,7 @@ class PermissionMiddlewareTest extends TestCase
 
         Passport::actingAsClient($this->testClient, ['*']);
 
-        $this->testClient->givePermissionTo('edit-posts');
+        $this->testClient->givePermissionTo('all', 'edit-posts');
 
         $this->assertEquals(
             403,
@@ -409,7 +409,7 @@ class PermissionMiddlewareTest extends TestCase
     {
         Auth::guard('admin')->login($this->testAdmin);
 
-        $this->testAdmin->givePermissionTo('admin-permission');
+        $this->testAdmin->givePermissionTo('all', 'admin-permission');
 
         $this->assertEquals(
             200,
@@ -471,14 +471,14 @@ class PermissionMiddlewareTest extends TestCase
         app(Permission::class)->create(['name' => TestModels\TestRolePermissionsEnum::EDITARTICLES->value]);
 
         Auth::login($this->testUser);
-        $this->testUser->givePermissionTo(TestModels\TestRolePermissionsEnum::VIEWARTICLES);
+        $this->testUser->givePermissionTo('all', TestModels\TestRolePermissionsEnum::VIEWARTICLES);
 
         $this->assertEquals(
             200,
             $this->runMiddleware($this->permissionMiddleware, TestModels\TestRolePermissionsEnum::VIEWARTICLES)
         );
 
-        $this->testUser->givePermissionTo(TestModels\TestRolePermissionsEnum::EDITARTICLES);
+        $this->testUser->givePermissionTo('all', TestModels\TestRolePermissionsEnum::EDITARTICLES);
 
         $this->assertEquals(
             200,

@@ -470,7 +470,7 @@ class HasRolesTest extends TestCase
         $user = User::create(['email' => 'user@test.com']);
 
         $user->assignRole('testRole');
-        $user->givePermissionTo('edit-articles');
+        $user->givePermissionTo('all', 'edit-articles');
 
         $this->assertDatabaseHas('model_has_permissions', [config('permission.column_names.model_morph_key') => $user->id]);
         $this->assertDatabaseHas('model_has_roles', [config('permission.column_names.model_morph_key') => $user->id]);

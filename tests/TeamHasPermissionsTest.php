@@ -15,10 +15,10 @@ class TeamHasPermissionsTest extends HasPermissionsTest
     public function it_can_assign_same_and_different_permission_on_same_user_on_different_teams()
     {
         setPermissionsTeamId(1);
-        $this->testUser->givePermissionTo('edit-articles', 'edit-news');
+        $this->testUser->givePermissionTo('all', 'edit-articles', 'edit-news');
 
         setPermissionsTeamId(2);
-        $this->testUser->givePermissionTo('edit-articles', 'edit-blog');
+        $this->testUser->givePermissionTo('all', 'edit-articles', 'edit-blog');
 
         setPermissionsTeamId(1);
         $this->testUser->load('permissions');
@@ -43,15 +43,15 @@ class TeamHasPermissionsTest extends HasPermissionsTest
     #[Test]
     public function it_can_list_all_the_coupled_permissions_both_directly_and_via_roles_on_same_user_on_different_teams()
     {
-        $this->testUserRole->givePermissionTo('edit-articles');
+        $this->testUserRole->givePermissionTo('all', 'edit-articles');
 
         setPermissionsTeamId(1);
         $this->testUser->assignRole('testRole');
-        $this->testUser->givePermissionTo('edit-news');
+        $this->testUser->givePermissionTo('all', 'edit-news');
 
         setPermissionsTeamId(2);
         $this->testUser->assignRole('testRole');
-        $this->testUser->givePermissionTo('edit-blog');
+        $this->testUser->givePermissionTo('all', 'edit-blog');
 
         setPermissionsTeamId(1);
         $this->testUser->load('roles', 'permissions');
@@ -75,10 +75,10 @@ class TeamHasPermissionsTest extends HasPermissionsTest
     public function it_can_sync_or_remove_permission_without_detach_on_different_teams()
     {
         setPermissionsTeamId(1);
-        $this->testUser->syncPermissions('edit-articles', 'edit-news');
+        $this->testUser->syncPermissions('all', 'edit-articles', 'edit-news');
 
         setPermissionsTeamId(2);
-        $this->testUser->syncPermissions('edit-articles', 'edit-blog');
+        $this->testUser->syncPermissions('all', 'edit-articles', 'edit-blog');
 
         setPermissionsTeamId(1);
         $this->testUser->load('permissions');
@@ -110,12 +110,12 @@ class TeamHasPermissionsTest extends HasPermissionsTest
         $user2 = User::create(['email' => 'user2@test.com']);
 
         setPermissionsTeamId(2);
-        $user1->givePermissionTo(['edit-articles', 'edit-news']);
-        $this->testUserRole->givePermissionTo('edit-articles');
+        $user1->givePermissionTo('all', ['edit-articles', 'edit-news']);
+        $this->testUserRole->givePermissionTo('all', 'edit-articles');
         $user2->assignRole('testRole');
 
         setPermissionsTeamId(1);
-        $user1->givePermissionTo(['edit-articles']);
+        $user1->givePermissionTo('all', ['edit-articles']);
 
         setPermissionsTeamId(2);
         $scopedUsers1Team2 = User::permission(['edit-articles', 'edit-news'])->get();

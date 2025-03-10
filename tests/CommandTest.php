@@ -118,7 +118,7 @@ class CommandTest extends TestCase
             $this->assertRegExp('/\|\s+edit-articles\s+\|\s+·\s+\|\s+·\s+\|/', $output);
         }
 
-        Role::findByName('testRole')->givePermissionTo('edit-articles');
+        Role::findByName('testRole')->givePermissionTo('all', 'edit-articles');
         $this->reloadPermissions();
 
         Artisan::call('permission:show');

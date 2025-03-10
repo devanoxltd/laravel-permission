@@ -18,7 +18,7 @@ class CustomGateTest extends TestCase
     #[Test]
     public function it_doesnt_register_the_method_for_checking_permissions_on_the_gate()
     {
-        $this->testUser->givePermissionTo('edit-articles');
+        $this->testUser->givePermissionTo('all', 'edit-articles');
 
         $this->assertEmpty(app(Gate::class)->abilities());
         $this->assertFalse($this->testUser->can('edit-articles'));

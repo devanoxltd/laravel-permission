@@ -23,7 +23,7 @@ class WildcardRoleTest extends TestCase
     public function it_can_be_given_a_permission()
     {
         Permission::create(['name' => 'posts.*']);
-        $this->testUserRole->givePermissionTo('posts.*');
+        $this->testUserRole->givePermissionTo('all', 'posts.*');
 
         $this->assertTrue($this->testUserRole->hasPermissionTo('posts.create'));
     }
@@ -35,7 +35,7 @@ class WildcardRoleTest extends TestCase
         Permission::create(['name' => 'posts.*']);
         Permission::create(['name' => 'news.*']);
 
-        $this->testUserRole->givePermissionTo(['posts.*', 'news.*']);
+        $this->testUserRole->givePermissionTo('all', ['posts.*', 'news.*']);
 
         $this->assertTrue($this->testUserRole->hasPermissionTo('posts.create'));
         $this->assertTrue($this->testUserRole->hasPermissionTo('news.create'));
@@ -48,7 +48,7 @@ class WildcardRoleTest extends TestCase
         Permission::create(['name' => 'posts.*']);
         Permission::create(['name' => 'news.*']);
 
-        $this->testUserRole->givePermissionTo('posts.*', 'news.*');
+        $this->testUserRole->givePermissionTo('all', 'posts.*', 'news.*');
 
         $this->assertTrue($this->testUserRole->hasPermissionTo('posts.edit.123'));
         $this->assertTrue($this->testUserRole->hasPermissionTo('news.view.1'));
@@ -58,7 +58,7 @@ class WildcardRoleTest extends TestCase
     #[Test]
     public function it_can_be_given_a_permission_using_objects()
     {
-        $this->testUserRole->givePermissionTo($this->testUserPermission);
+        $this->testUserRole->givePermissionTo('all', $this->testUserPermission);
 
         $this->assertTrue($this->testUserRole->hasPermissionTo($this->testUserPermission));
     }
@@ -94,7 +94,7 @@ class WildcardRoleTest extends TestCase
 
         $this->assertFalse($this->testUserRole->hasPermissionTo($permission));
 
-        $this->testUserRole->givePermissionTo($permission);
+        $this->testUserRole->givePermissionTo('all', $permission);
 
         $this->testUserRole = $this->testUserRole->fresh();
 

@@ -47,7 +47,7 @@ class GateTest extends TestCase
     #[Test]
     public function it_can_determine_if_a_user_has_a_direct_permission()
     {
-        $this->testUser->givePermissionTo('edit-articles');
+        $this->testUser->givePermissionTo('all', 'edit-articles');
 
         $this->assertTrue($this->testUser->can('edit-articles'));
 
@@ -72,7 +72,7 @@ class GateTest extends TestCase
         $this->assertFalse($this->testUser->can($enum->value));
         $this->assertFalse($this->testUser->canAny([$enum->value, 'some other permission']));
 
-        $this->testUser->givePermissionTo($enum);
+        $this->testUser->givePermissionTo('all', $enum);
 
         $this->assertTrue($this->testUser->hasPermissionTo($enum));
 
@@ -84,7 +84,7 @@ class GateTest extends TestCase
     #[Test]
     public function it_can_determine_if_a_user_has_a_permission_through_roles()
     {
-        $this->testUserRole->givePermissionTo($this->testUserPermission);
+        $this->testUserRole->givePermissionTo('all', $this->testUserPermission);
 
         $this->testUser->assignRole($this->testUserRole);
 
@@ -101,7 +101,7 @@ class GateTest extends TestCase
     #[Test]
     public function it_can_determine_if_a_user_with_a_different_guard_has_a_permission_when_using_roles()
     {
-        $this->testAdminRole->givePermissionTo($this->testAdminPermission);
+        $this->testAdminRole->givePermissionTo('all', $this->testAdminPermission);
 
         $this->testAdmin->assignRole($this->testAdminRole);
 

@@ -34,7 +34,7 @@ $permission = Permission::create(['name' => 'edit articles']);
 A permission can be assigned to a role using either of these methods:
 
 ```php
-$role->givePermissionTo($permission);
+$role->givePermissionTo('all', $permission);
 $permission->assignRole($role);
 ```
 
@@ -42,7 +42,7 @@ $permission->assignRole($role);
 Multiple permissions can be synced to a role using either of these methods:
 
 ```php
-$role->syncPermissions($permissions);
+$role->syncPermissions('all', $permissions);
 $permission->syncRoles($roles);
 ```
 

@@ -41,12 +41,12 @@ class MultipleGuardsTest extends TestCase
     #[Test]
     public function it_can_give_a_permission_to_a_model_that_is_used_by_multiple_guards()
     {
-        $this->testUser->givePermissionTo(app(Permission::class)::create([
+        $this->testUser->givePermissionTo('all', app(Permission::class)::create([
             'name' => 'do_this',
             'guard_name' => 'web',
         ]));
 
-        $this->testUser->givePermissionTo(app(Permission::class)::create([
+        $this->testUser->givePermissionTo('all', app(Permission::class)::create([
             'name' => 'do_that',
             'guard_name' => 'api',
         ]));
@@ -60,12 +60,12 @@ class MultipleGuardsTest extends TestCase
     #[Test]
     public function the_gate_can_grant_permission_to_a_user_by_passing_a_guard_name()
     {
-        $this->testUser->givePermissionTo(app(Permission::class)::create([
+        $this->testUser->givePermissionTo('all', app(Permission::class)::create([
             'name' => 'do_this',
             'guard_name' => 'web',
         ]));
 
-        $this->testUser->givePermissionTo(app(Permission::class)::create([
+        $this->testUser->givePermissionTo('all', app(Permission::class)::create([
             'name' => 'do_that',
             'guard_name' => 'api',
         ]));
@@ -77,7 +77,7 @@ class MultipleGuardsTest extends TestCase
         $this->assertTrue($this->testUser->cannot('do_that', 'web'));
         $this->assertTrue($this->testUser->canAny(['do_this', 'do_that'], 'web'));
 
-        $this->testAdminRole->givePermissionTo($this->testAdminPermission);
+        $this->testAdminRole->givePermissionTo('all', $this->testAdminPermission);
         $this->testAdmin->assignRole($this->testAdminRole);
 
         $this->assertTrue($this->testAdmin->hasPermissionTo($this->testAdminPermission));
@@ -103,7 +103,7 @@ class MultipleGuardsTest extends TestCase
     public function it_can_honour_guardName_function_on_model_for_overriding_guard_name_property()
     {
         $user = Manager::create(['email' => 'manager@test.com']);
-        $user->givePermissionTo(app(Permission::class)::create([
+        $user->givePermissionTo('all', app(Permission::class)::create([
             'name' => 'do_jwt',
             'guard_name' => 'jwt',
         ]));

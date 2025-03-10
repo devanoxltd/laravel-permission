@@ -20,11 +20,11 @@ class TeamHasRolesTest extends HasRolesTest
 
         setPermissionsTeamId(1);
         $user1->assignRole('testRole');
-        $user1->givePermissionTo('edit-articles');
+        $user1->givePermissionTo('all', 'edit-articles');
         $user2->assignRole('testRole');
-        $user2->givePermissionTo('edit-articles');
+        $user2->givePermissionTo('all', 'edit-articles');
         setPermissionsTeamId(2);
-        $user1->givePermissionTo('edit-news');
+        $user1->givePermissionTo('all', 'edit-news');
 
         $this->assertDatabaseHas('model_has_permissions', [config('permission.column_names.model_morph_key') => $user1->id]);
         $this->assertDatabaseHas('model_has_roles', [config('permission.column_names.model_morph_key') => $user1->id]);

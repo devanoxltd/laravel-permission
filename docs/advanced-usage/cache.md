@@ -11,9 +11,9 @@ When you **use the built-in functions** for manipulating roles and permissions, 
 
 ```php
 // When handling permissions assigned to roles:
-$role->givePermissionTo('edit articles');
+$role->givePermissionTo('all', 'edit articles');
 $role->revokePermissionTo('edit articles');
-$role->syncPermissions(params);
+$role->syncPermissions('all', params);
 
 // When linking roles to permissions:
 $permission->assignRole('writer');
@@ -64,7 +64,7 @@ We recommend not changing the cache "key" name. Usually changing it is a bad ide
 
 ### Cache Identifier / Prefix
 
-Laravel Tip: If you are leveraging a caching service such as `redis` or `memcached` and there are other sites running on your server, you could run into cache clashes between apps. 
+Laravel Tip: If you are leveraging a caching service such as `redis` or `memcached` and there are other sites running on your server, you could run into cache clashes between apps.
 
 To prevent other applications from accidentally using/changing your cached data, it is prudent to set your own cache `prefix` in Laravel's `/config/cache.php` to something unique for each application which shares the same caching service.
 
@@ -94,7 +94,7 @@ Alternatively, in development mode you can bypass ALL of Laravel's caching betwe
 
 This situation is not specific to this package, but is mentioned here due to the common question being asked.
 
-If you are using the `File` cache Store and run into problems clearing the cache, it is most likely because your filesystem's permissions are preventing the PHP CLI from altering the cache files because the PHP-FPM process is running as a different user. 
+If you are using the `File` cache Store and run into problems clearing the cache, it is most likely because your filesystem's permissions are preventing the PHP CLI from altering the cache files because the PHP-FPM process is running as a different user.
 
 Work with your server administrator to fix filesystem ownership on your cache files.
 

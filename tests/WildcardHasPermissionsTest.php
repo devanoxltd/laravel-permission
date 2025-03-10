@@ -25,7 +25,7 @@ class WildcardHasPermissionsTest extends TestCase
         $permission2 = Permission::create(['name' => 'news.*']);
         $permission3 = Permission::create(['name' => 'posts.*']);
 
-        $user1->givePermissionTo([$permission1, $permission2, $permission3]);
+        $user1->givePermissionTo('all', [$permission1, $permission2, $permission3]);
 
         $this->assertTrue($user1->hasPermissionTo('posts.create'));
         $this->assertTrue($user1->hasPermissionTo('posts.create.123'));
@@ -46,7 +46,7 @@ class WildcardHasPermissionsTest extends TestCase
         $permission2 = Permission::create(['name' => 'news.*', 'guard_name' => 'api']);
         $permission3 = Permission::create(['name' => 'posts.*', 'guard_name' => 'api']);
 
-        $user1->givePermissionTo([$permission1, $permission2, $permission3]);
+        $user1->givePermissionTo('all', [$permission1, $permission2, $permission3]);
 
         $this->assertTrue($user1->hasPermissionTo('posts.create', 'api'));
         $this->assertTrue($user1->hasPermissionTo('posts.create.123', 'api'));
@@ -68,7 +68,7 @@ class WildcardHasPermissionsTest extends TestCase
         $permission3 = Permission::create(['name' => 'news.*', 'guard_name' => 'api']);
         $permission4 = Permission::create(['name' => 'posts.*', 'guard_name' => 'api']);
 
-        $user1->givePermissionTo([$permission1, $permission2, $permission3]);
+        $user1->givePermissionTo('all', [$permission1, $permission2, $permission3]);
 
         $this->assertTrue($user1->hasPermissionTo($permission1));
         $this->assertTrue($user1->hasPermissionTo($permission2));
@@ -99,7 +99,7 @@ class WildcardHasPermissionsTest extends TestCase
         $permission2 = app(Permission::class)->findOrCreate($newsEverything->value, 'web');
         $permission3 = app(Permission::class)->findOrCreate($postsEverything->value, 'web');
 
-        $user1->givePermissionTo([$permission1, $permission2, $permission3]);
+        $user1->givePermissionTo('all', [$permission1, $permission2, $permission3]);
 
         $this->assertTrue($user1->hasPermissionTo($postsCreate));
         $this->assertTrue($user1->hasPermissionTo($postsCreate->value.'.123'));
@@ -134,7 +134,7 @@ class WildcardHasPermissionsTest extends TestCase
         $permission2 = Permission::create(['name' => 'news.*.456']);
         $permission3 = Permission::create(['name' => 'posts']);
 
-        $this->testUserRole->givePermissionTo([$permission1, $permission2, $permission3]);
+        $this->testUserRole->givePermissionTo('all', [$permission1, $permission2, $permission3]);
 
         $this->assertTrue($user1->hasPermissionTo('posts.create'));
         $this->assertTrue($user1->hasPermissionTo('news.create.456'));
@@ -157,7 +157,7 @@ class WildcardHasPermissionsTest extends TestCase
         $permission2 = Permission::create(['name' => 'news:@']);
         $permission3 = Permission::create(['name' => 'posts:@']);
 
-        $user1->givePermissionTo([$permission1, $permission2, $permission3]);
+        $user1->givePermissionTo('all', [$permission1, $permission2, $permission3]);
 
         $this->assertTrue($user1->hasPermissionTo('posts:create'));
         $this->assertTrue($user1->hasPermissionTo('posts:create:123'));
@@ -183,7 +183,7 @@ class WildcardHasPermissionsTest extends TestCase
         $permission2 = Permission::create(['name' => 'news:@:456']);
         $permission3 = Permission::create(['name' => 'posts']);
 
-        $this->testUserRole->givePermissionTo([$permission1, $permission2, $permission3]);
+        $this->testUserRole->givePermissionTo('all', [$permission1, $permission2, $permission3]);
 
         $this->assertTrue($user1->hasPermissionTo('posts:create'));
         $this->assertTrue($user1->hasPermissionTo('news:create:456'));
@@ -207,7 +207,7 @@ class WildcardHasPermissionsTest extends TestCase
         $permission2 = Permission::create(['name' => 'create news']);
         $permission3 = Permission::create(['name' => 'update comments']);
 
-        $user1->givePermissionTo([$permission1, $permission2, $permission3]);
+        $user1->givePermissionTo('all', [$permission1, $permission2, $permission3]);
 
         $this->assertTrue($user1->hasPermissionTo('edit articles'));
         $this->assertTrue($user1->hasPermissionTo('create news'));
@@ -226,7 +226,7 @@ class WildcardHasPermissionsTest extends TestCase
         $permission2 = Permission::create(['name' => 'papers,posts,projects,orders.*.test,test1,test2.*']);
         $permission3 = Permission::create(['name' => 'User::class.create,edit,view']);
 
-        $user1->givePermissionTo([$permission1, $permission2, $permission3]);
+        $user1->givePermissionTo('all', [$permission1, $permission2, $permission3]);
 
         $this->assertTrue($user1->hasPermissionTo('invoices.delete.367463.finance'));
         $this->assertTrue($user1->hasPermissionTo('projects.update.test2.test3'));
@@ -245,7 +245,7 @@ class WildcardHasPermissionsTest extends TestCase
 
         $permission = Permission::create(['name' => '*..']);
 
-        $user1->givePermissionTo([$permission]);
+        $user1->givePermissionTo('all', [$permission]);
 
         $this->expectException(WildcardPermissionNotProperlyFormatted::class);
 
@@ -263,7 +263,7 @@ class WildcardHasPermissionsTest extends TestCase
         $userPermission = Permission::create(['name' => 'posts.*']);
         $permissionToVerify = Permission::create(['name' => 'posts.create']);
 
-        $user->givePermissionTo([$userPermission]);
+        $user->givePermissionTo('all', [$userPermission]);
 
         $this->assertTrue($user->hasPermissionTo('posts.create'));
         $this->assertTrue($user->hasPermissionTo('posts.create.123'));
@@ -282,7 +282,7 @@ class WildcardHasPermissionsTest extends TestCase
         $userPermission = Permission::create(['name' => 'posts.*']);
         $permissionToVerify = Permission::create(['name' => 'posts.create']);
 
-        $user->givePermissionTo([$userPermission, $permissionToVerify]);
+        $user->givePermissionTo('all', [$userPermission, $permissionToVerify]);
 
         $this->assertTrue($user->hasPermissionTo('posts.create'));
         $this->assertTrue($user->hasPermissionTo('posts.create.123'));
@@ -300,7 +300,7 @@ class WildcardHasPermissionsTest extends TestCase
 
         $userPermission = Permission::create(['name' => '8']);
 
-        $user->givePermissionTo([$userPermission]);
+        $user->givePermissionTo('all', [$userPermission]);
 
         $this->assertTrue($user->hasPermissionTo('8'));
     }

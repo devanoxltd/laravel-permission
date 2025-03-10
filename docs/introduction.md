@@ -9,12 +9,12 @@ Once installed you can do stuff like this:
 
 ```php
 // Adding permissions to a user
-$user->givePermissionTo('edit articles');
+$user->givePermissionTo('all', 'edit articles');
 
 // Adding permissions via a role
 $user->assignRole('writer');
 
-$role->givePermissionTo('edit articles');
+$role->givePermissionTo('all', 'edit articles');
 ```
 
 If you're using multiple guards we've got you covered as well. Every guard will have its own set of permissions and roles that can be assigned to the guard's users. Read about it in the [using multiple guards](./basic-usage/multiple-guards/) section.

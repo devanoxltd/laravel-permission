@@ -115,7 +115,7 @@ class CacheTest extends TestCase
     #[Test]
     public function removing_a_permission_from_a_user_should_not_flush_the_cache()
     {
-        $this->testUser->givePermissionTo('edit-articles');
+        $this->testUser->givePermissionTo('all', 'edit-articles');
 
         $this->registrar->getPermissions();
 
@@ -166,7 +166,7 @@ class CacheTest extends TestCase
     #[Test]
     public function it_flushes_the_cache_when_assign_a_permission_to_a_role()
     {
-        $this->testUserRole->givePermissionTo('edit-articles');
+        $this->testUserRole->givePermissionTo('all', 'edit-articles');
 
         $this->resetQueryCount();
 
@@ -195,7 +195,7 @@ class CacheTest extends TestCase
     #[Test]
     public function it_flushes_the_cache_when_giving_a_permission_to_a_role()
     {
-        $this->testUserRole->givePermissionTo($this->testUserPermission);
+        $this->testUserRole->givePermissionTo('all', $this->testUserPermission);
 
         $this->resetQueryCount();
 
@@ -208,7 +208,7 @@ class CacheTest extends TestCase
     #[Test]
     public function has_permission_to_should_use_the_cache()
     {
-        $this->testUserRole->givePermissionTo(['edit-articles', 'edit-news', 'Edit News']);
+        $this->testUserRole->givePermissionTo('all', ['edit-articles', 'edit-news', 'Edit News']);
         $this->testUser->assignRole('testRole');
         $this->testUser->loadMissing('roles', 'permissions'); // load relations
 
@@ -235,7 +235,7 @@ class CacheTest extends TestCase
     {
         $this->expectException(PermissionDoesNotExist::class);
 
-        $this->testUserRole->givePermissionTo(['edit-articles', 'web']);
+        $this->testUserRole->givePermissionTo('all', ['edit-articles', 'web']);
         $this->testUser->assignRole('testRole');
         $this->testUser->loadMissing('roles', 'permissions'); // load relations
 
@@ -252,7 +252,7 @@ class CacheTest extends TestCase
     #[Test]
     public function get_all_permissions_should_use_the_cache()
     {
-        $this->testUserRole->givePermissionTo($expected = ['edit-articles', 'edit-news']);
+        $this->testUserRole->givePermissionTo('all', $expected = ['edit-articles', 'edit-news']);
         $this->testUser->assignRole('testRole');
         $this->testUser->loadMissing('roles.permissions', 'permissions'); // load relations
 
@@ -271,7 +271,7 @@ class CacheTest extends TestCase
     #[Test]
     public function get_all_permissions_should_not_over_hydrate_roles()
     {
-        $this->testUserRole->givePermissionTo(['edit-articles', 'edit-news']);
+        $this->testUserRole->givePermissionTo('all', ['edit-articles', 'edit-news']);
         $permissions = $this->registrar->getPermissions();
         $roles = $permissions->flatMap->roles;
 

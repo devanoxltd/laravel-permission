@@ -19,12 +19,12 @@ Once installed you can do stuff like this:
 
 ```php
 // Adding permissions to a user
-$user->givePermissionTo('edit articles');
+$user->givePermissionTo('all', 'edit articles');
 
 // Adding permissions via a role
 $user->assignRole('writer');
 
-$role->givePermissionTo('edit articles');
+$role->givePermissionTo('all', 'edit articles');
 ```
 
 Because all permissions will be registered on [Laravel's gate](https://laravel.com/docs/authorization), you can check if a user has a permission with Laravel's default `can` function:

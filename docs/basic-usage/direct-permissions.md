@@ -18,13 +18,13 @@ HOWEVER, If you have reason to directly assign individual permissions to specifi
 A permission can be given to any user:
 
 ```php
-$user->givePermissionTo('edit articles');
+$user->givePermissionTo('all', 'edit articles');
 
 // You can also give multiple permission at once
-$user->givePermissionTo('edit articles', 'delete articles');
+$user->givePermissionTo('all', 'edit articles', 'delete articles');
 
 // You may also pass an array
-$user->givePermissionTo(['edit articles', 'delete articles']);
+$user->givePermissionTo('all', ['edit articles', 'delete articles']);
 ```
 
 A permission can be revoked from a user:
@@ -36,7 +36,7 @@ $user->revokePermissionTo('edit articles');
 Or revoke & add new permissions in one go:
 
 ```php
-$user->syncPermissions(['edit articles', 'delete articles']);
+$user->syncPermissions('all', ['edit articles', 'delete articles']);
 ```
 
 ## Checking Direct Permissions

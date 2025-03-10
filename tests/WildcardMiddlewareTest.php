@@ -51,7 +51,7 @@ class WildcardMiddlewareTest extends TestCase
 
         Permission::create(['name' => 'articles']);
 
-        $this->testUser->givePermissionTo('articles');
+        $this->testUser->givePermissionTo('all', 'articles');
 
         $this->assertEquals(
             200,
@@ -67,7 +67,7 @@ class WildcardMiddlewareTest extends TestCase
 
         Permission::create(['name' => 'articles.*.test']);
 
-        $this->testUser->givePermissionTo('articles.*.test');
+        $this->testUser->givePermissionTo('all', 'articles.*.test');
 
         $this->assertEquals(
             200,
@@ -88,7 +88,7 @@ class WildcardMiddlewareTest extends TestCase
 
         Permission::create(['name' => 'articles.*']);
 
-        $this->testUser->givePermissionTo('articles.*');
+        $this->testUser->givePermissionTo('all', 'articles.*');
 
         $this->assertEquals(
             403,
@@ -117,7 +117,7 @@ class WildcardMiddlewareTest extends TestCase
         Permission::create(['name' => 'articles.*']);
 
         $this->testUser->assignRole('testRole');
-        $this->testUser->givePermissionTo('articles.*');
+        $this->testUser->givePermissionTo('all', 'articles.*');
 
         $this->assertEquals(
             200,

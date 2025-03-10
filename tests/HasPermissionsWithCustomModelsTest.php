@@ -45,7 +45,7 @@ class HasPermissionsWithCustomModelsTest extends HasPermissionsTest
             $table->string('type')->default('P');
         });
 
-        $this->testUserRole->givePermissionTo($this->testUserPermission);
+        $this->testUserRole->givePermissionTo('all', $this->testUserPermission);
         app(PermissionRegistrar::class)->getPermissions();
 
         DB::enableQueryLog();
@@ -74,8 +74,8 @@ class HasPermissionsWithCustomModelsTest extends HasPermissionsTest
 
         $user1 = User::create(['email' => 'user1@test.com']);
         $user2 = User::create(['email' => 'user2@test.com']);
-        $user1->givePermissionTo([$uuid1, $uuid2]);
-        $this->testUserRole->givePermissionTo($uuid1);
+        $user1->givePermissionTo('all', [$uuid1, $uuid2]);
+        $this->testUserRole->givePermissionTo('all', $uuid1);
         $user2->assignRole('testRole');
 
         $scopedUsers1 = User::permission($uuid1)->get();
@@ -89,7 +89,7 @@ class HasPermissionsWithCustomModelsTest extends HasPermissionsTest
     #[Test]
     public function it_doesnt_detach_roles_when_soft_deleting()
     {
-        $this->testUserRole->givePermissionTo($this->testUserPermission);
+        $this->testUserRole->givePermissionTo('all', $this->testUserPermission);
 
         DB::enableQueryLog();
         $this->testUserPermission->delete();
@@ -106,7 +106,7 @@ class HasPermissionsWithCustomModelsTest extends HasPermissionsTest
     #[Test]
     public function it_doesnt_detach_users_when_soft_deleting()
     {
-        $this->testUser->givePermissionTo($this->testUserPermission);
+        $this->testUser->givePermissionTo('all', $this->testUserPermission);
 
         DB::enableQueryLog();
         $this->testUserPermission->delete();
@@ -124,8 +124,8 @@ class HasPermissionsWithCustomModelsTest extends HasPermissionsTest
     public function it_does_detach_roles_and_users_when_force_deleting()
     {
         $permission_id = $this->testUserPermission->getKey();
-        $this->testUserRole->givePermissionTo($permission_id);
-        $this->testUser->givePermissionTo($permission_id);
+        $this->testUserRole->givePermissionTo('all', $permission_id);
+        $this->testUser->givePermissionTo('all', $permission_id);
 
         DB::enableQueryLog();
         $this->testUserPermission->forceDelete();
@@ -154,7 +154,7 @@ class HasPermissionsWithCustomModelsTest extends HasPermissionsTest
 
         Carbon::setTestNow('2021-07-20 19:13:14');
 
-        $user->syncPermissions([$permission1->getKey(), $permission2->getKey()]);
+        $user->syncPermissions('all', [$permission1->getKey(), $permission2->getKey()]);
 
         $this->assertSame('2021-07-20 19:13:14', $permission1->refresh()->updated_at->format('Y-m-d H:i:s'));
         $this->assertSame('2021-07-20 19:13:14', $permission2->refresh()->updated_at->format('Y-m-d H:i:s'));

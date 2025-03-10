@@ -90,12 +90,12 @@ class PermissionsDemoSeeder extends Seeder
 
         // create roles and assign existing permissions
         $role1 = Role::create(['name' => 'writer']);
-        $role1->givePermissionTo('edit articles');
-        $role1->givePermissionTo('delete articles');
+        $role1->givePermissionTo('all', 'edit articles');
+        $role1->givePermissionTo('all', 'delete articles');
 
         $role2 = Role::create(['name' => 'admin']);
-        $role2->givePermissionTo('publish articles');
-        $role2->givePermissionTo('unpublish articles');
+        $role2->givePermissionTo('all', 'publish articles');
+        $role2->givePermissionTo('all', 'unpublish articles');
 
         $role3 = Role::create(['name' => 'Super-Admin']);
         // gets all permissions via Gate::before rule; see AuthServiceProvider
@@ -182,7 +182,7 @@ Three users were created: tester@example.com, admin@example.com, superadmin@exam
 ```
 With the above code, when you login with each respective user, you will see different messages based on that access.
 
-Here's a routes example with Breeze and Laravel 11. 
+Here's a routes example with Breeze and Laravel 11.
 Edit `/routes/web.php`:
 ```diff
 -Route::middleware('auth')->group(function () {
@@ -204,7 +204,7 @@ To share your app on Github for easy collaboration:
 git remote add origin git@github.com:YOURUSERNAME/REPONAME.git
 git push -u origin main
 ```
-The above only needs to be done once. 
+The above only needs to be done once.
 
 - then add the rest of your code by making new commits:
 

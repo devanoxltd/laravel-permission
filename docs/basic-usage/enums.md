@@ -9,7 +9,7 @@ Requires `version 6` of this package.
 
 Requires PHP 8.1 or higher.
 
-If you are using PHP 8.1+ you can implement Enums as native types. 
+If you are using PHP 8.1+ you can implement Enums as native types.
 
 Internally, Enums implicitly implement `\BackedEnum`, which is how this package recognizes that you're passing an Enum.
 
@@ -88,16 +88,16 @@ The following methods of this package support passing `BackedEnum` parameters di
 	$user->assignRole(RolesEnum::WRITER);
 	$user->removeRole(RolesEnum::EDITOR);
 
-    $role->givePermissionTo(PermissionsEnum::EDITPOSTS);
+    $role->givePermissionTo('all', PermissionsEnum::EDITPOSTS);
     $role->revokePermissionTo(PermissionsEnum::EDITPOSTS);
 
-    $user->givePermissionTo(PermissionsEnum::EDITPOSTS);
+    $user->givePermissionTo('all', PermissionsEnum::EDITPOSTS);
     $user->revokePermissionTo(PermissionsEnum::EDITPOSTS);
 
 	$user->hasPermissionTo(PermissionsEnum::EDITPOSTS);
 	$user->hasAnyPermission([PermissionsEnum::EDITPOSTS, PermissionsEnum::VIEWPOSTS]);
 	$user->hasDirectPermission(PermissionsEnum::EDITPOSTS);
-    
+
     $user->hasRole(RolesEnum::WRITER);
     $user->hasAllRoles([RolesEnum::WRITER, RolesEnum::EDITOR]);
     $user->hasExactRoles([RolesEnum::WRITER, RolesEnum::EDITOR, RolesEnum::MANAGER]);

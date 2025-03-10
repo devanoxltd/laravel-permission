@@ -87,7 +87,7 @@ class BladeTest extends TestCase
     public function the_can_directive_can_accept_a_guard_name()
     {
         $user = $this->getWriter();
-        $user->givePermissionTo('edit-articles');
+        $user->givePermissionTo('all', 'edit-articles');
         auth()->setUser($user);
 
         $permission = 'edit-articles';
@@ -99,7 +99,7 @@ class BladeTest extends TestCase
         auth()->logout();
 
         // log in as the Admin with the permission-via-role
-        $this->testAdmin->givePermissionTo($this->testAdminPermission);
+        $this->testAdmin->givePermissionTo('all', $this->testAdminPermission);
         $user = $this->testAdmin;
         auth()->setUser($user);
 
@@ -119,7 +119,7 @@ class BladeTest extends TestCase
     {
         $user = $this->getWriter();
 
-        $user->givePermissionTo('edit-articles');
+        $user->givePermissionTo('all', 'edit-articles');
 
         auth()->setUser($user);
 
@@ -133,7 +133,7 @@ class BladeTest extends TestCase
         $user = $this->getWriter();
 
         $permission = 'edit-articles';
-        $user->givePermissionTo('edit-articles');
+        $user->givePermissionTo('all', 'edit-articles');
 
         auth()->setUser($user);
 
@@ -143,7 +143,7 @@ class BladeTest extends TestCase
         $elsepermission = 'na';
         $this->assertEquals('does not have permission', $this->renderView('haspermission', compact('permission', 'elsepermission', 'guard')));
 
-        $this->testAdminRole->givePermissionTo($this->testAdminPermission);
+        $this->testAdminRole->givePermissionTo('all', $this->testAdminPermission);
         $this->testAdmin->assignRole($this->testAdminRole);
         auth('admin')->setUser($this->testAdmin);
         $guard = 'admin';

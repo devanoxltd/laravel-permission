@@ -69,7 +69,7 @@ The `assignRole`, `hasRole`, `hasAnyRole`, `hasAllRoles`, `hasExactRoles`  and `
 A permission can be given to a role:
 
 ```php
-$role->givePermissionTo('edit articles');
+$role->givePermissionTo('all', 'edit articles');
 ```
 
 You can determine if a role has a certain permission:
@@ -87,7 +87,7 @@ $role->revokePermissionTo('edit articles');
 Or revoke & add new permissions in one go:
 
 ```php
-$role->syncPermissions(['edit articles', 'delete articles']);
+$role->syncPermissions('all', ['edit articles', 'delete articles']);
 ```
 
 The `givePermissionTo` and `revokePermissionTo` functions can accept a
@@ -116,21 +116,21 @@ $role->permissions->count();
 
 ## Assigning Direct Permissions To A User
 
-Additionally, individual permissions can be assigned to the user too. 
+Additionally, individual permissions can be assigned to the user too.
 For instance:
 
 ```php
 $role = Role::findByName('writer');
-$role->givePermissionTo('edit articles');
+$role->givePermissionTo('all', 'edit articles');
 
 $user->assignRole('writer');
 
-$user->givePermissionTo('delete articles');
+$user->givePermissionTo('all', 'delete articles');
 ```
 
-In the above example, a role is given permission to edit articles and this role is assigned to a user. 
+In the above example, a role is given permission to edit articles and this role is assigned to a user.
 Now the user can edit articles and additionally delete articles. The permission of 'delete articles' is the user's direct permission because it is assigned directly to them.
-When we call `$user->hasDirectPermission('delete articles')` it returns `true`, 
+When we call `$user->hasDirectPermission('delete articles')` it returns `true`,
 but `false` for `$user->hasDirectPermission('edit articles')`.
 
 This method is useful if one builds a form for setting permissions for roles and users in an application and wants to restrict or change inherited permissions of roles of the user, i.e. allowing to change only direct permissions of the user.
@@ -148,7 +148,7 @@ $user->hasAllDirectPermissions(['edit articles', 'delete articles']);
 // Check if the user has Any permission directly
 $user->hasAnyDirectPermission(['create articles', 'delete articles']);
 ```
-By following the previous example, when we call `$user->hasAllDirectPermissions(['edit articles', 'delete articles'])` 
+By following the previous example, when we call `$user->hasAllDirectPermissions(['edit articles', 'delete articles'])`
 it returns `false`, because the user does not have `edit articles` as a direct permission.
 When we call
 `$user->hasAnyDirectPermission('edit articles')`, it returns `true` because the user has one of the provided permissions.
@@ -169,6 +169,6 @@ $user->getAllPermissions();
 
 All these responses are collections of `Spatie\Permission\Models\Permission` objects.
 
-If we follow the previous example, the first response will be a collection with the `delete article` permission and 
+If we follow the previous example, the first response will be a collection with the `delete article` permission and
 the second will be a collection with the `edit article` permission and the third will contain both.
 

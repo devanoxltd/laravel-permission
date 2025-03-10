@@ -38,7 +38,7 @@ class CreateRole extends Command
             $this->warn("Role `{$role->name}` already exists on the global team; argument --team-id has no effect");
         }
 
-        $role->givePermissionTo($this->makePermissions($this->argument('permissions')));
+        $role->givePermissionTo('all', $this->makePermissions($this->argument('permissions')));
 
         $this->info("Role `{$role->name}` ".($role->wasRecentlyCreated ? 'created' : 'updated'));
     }
