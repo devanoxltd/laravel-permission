@@ -465,7 +465,6 @@ trait HasPermissions
         }
 
         if ($this->getModel()->exists) {
-            $this->collectPermissions($permissions);
             $this->permissions()->detach();
             $this->setRelation('permissions', collect());
         }
