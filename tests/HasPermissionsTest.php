@@ -615,10 +615,10 @@ class HasPermissionsTest extends TestCase
     #[Test]
     public function it_can_avoid_detach_on_permission_that_does_not_exist_sync()
     {
-        $this->testUser->syncPermissions('edit-articles');
+        $this->testUser->syncPermissions('all', 'edit-articles');
 
         try {
-            $this->testUser->syncPermissions('permission-does-not-exist');
+            $this->testUser->syncPermissions('all', 'permission-does-not-exist');
             $this->fail('Expected PermissionDoesNotExist exception was not thrown.');
         } catch (PermissionDoesNotExist $e) {
             //
