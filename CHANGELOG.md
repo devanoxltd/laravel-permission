@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-permission` will be documented in this file
 
+## v1.3.0 - 2025-07-07
+
+**Full Changelog**: https://github.com/devanoxltd/laravel-permission/compare/v1.2.0...v1.3.0
+
 ## v1.2.0 - 2025-06-06
 
 * Revert "Remove `collectPermissions` that is not being assigned" by @erikn69 in https://github.com/spatie/laravel-permission/pull/2851
