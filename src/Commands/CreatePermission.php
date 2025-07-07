@@ -20,6 +20,6 @@ class CreatePermission extends Command
 
         $permission = $permissionClass::firstOrCreate(['name' => $this->argument('name'), 'guard_name' => $this->argument('guard') ?? Guard::getDefaultName(config('permission.models.permission'))]);
 
-        $this->info("Permission `{$permission->name}` " . ($permission->wasRecentlyCreated ? 'created' : 'already exists'));
+        $this->info("Permission `{$permission->name}` ".($permission->wasRecentlyCreated ? 'created' : 'already exists'));
     }
 }
