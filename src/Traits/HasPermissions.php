@@ -605,4 +605,29 @@ trait HasPermissions
 
         return false;
     }
+
+    /**
+     * Determine if the model has the given permission with a specific permission_type in the pivot.
+     *
+     * @param  string|int|Permission|\BackedEnum  $permission
+     * @param  string|array $permissionType
+     * @return bool
+     */
+    public function hasPermissionWithType($permission, string|array $permissionType, $guardName = null): bool
+    {
+        $permission = $this->filterPermission($permission, $guardName);
+
+        // Load permissions relationship with pivot if not loaded
+        $this->loadMissing('permissions');
+
+        // Check if the permission exists with the given permission_type in the pivot
+        return $this->permissions->where($permission->getKeyName(), $permission->getKey())->contains(function ($perm) use ($permission, $permissionType) {
+            if ($perm->getKey() !== $permission->getKey()) {
+                return false;
+            }
+
+            // Check pivot permission_type
+            return isset($perm->pivot) && (is_array($permissionType) ? in_array($perm->pivot->permission_type, $permissionType) : $perm->pivot->permission_type === $permissionType);
+        });
+    }
 }
