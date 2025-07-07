@@ -613,7 +613,11 @@ trait HasPermissions
      */
     public function hasPermissionWithType($permission, string|array $permissionType, $guardName = null): bool
     {
-        $permission = $this->filterPermission($permission, $guardName);
+        try {
+            $permission = $this->filterPermission($permission, $guardName);
+        } catch (PermissionDoesNotExist $e) {
+            return false;
+        }
 
         // Load permissions relationship with pivot if not loaded
         $this->loadMissing('permissions');
