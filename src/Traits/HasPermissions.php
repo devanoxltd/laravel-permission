@@ -610,8 +610,6 @@ trait HasPermissions
      * Determine if the model has the given permission with a specific permission_type in the pivot.
      *
      * @param  string|int|Permission|\BackedEnum  $permission
-     * @param  string|array $permissionType
-     * @return bool
      */
     public function hasPermissionWithType($permission, string|array $permissionType, $guardName = null): bool
     {
