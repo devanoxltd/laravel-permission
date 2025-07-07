@@ -235,36 +235,6 @@ class RoleTest extends TestCase
 
     /** @test */
     #[Test]
-    public function it_creates_permission_object_with_findOrCreate_if_it_does_not_have_a_permission_object()
-    {
-        $permission = app(Permission::class)->findOrCreate('another-permission');
-
-        $this->assertFalse($this->testUserRole->hasPermissionTo($permission));
-
-        $this->testUserRole->givePermissionTo('all', $permission);
-
-        $this->testUserRole = $this->testUserRole->fresh();
-
-        $this->assertTrue($this->testUserRole->hasPermissionTo('another-permission'));
-    }
-
-    /** @test */
-    #[Test]
-    public function it_creates_a_role_with_findOrCreate_if_the_named_role_does_not_exist()
-    {
-        $this->expectException(RoleDoesNotExist::class);
-
-        $role1 = app(Role::class)->findByName('non-existing-role');
-
-        $this->assertNull($role1);
-
-        $role2 = app(Role::class)->findOrCreate('yet-another-role');
-
-        $this->assertInstanceOf(Role::class, $role2);
-    }
-
-    /** @test */
-    #[Test]
     public function it_throws_an_exception_when_a_permission_of_the_wrong_guard_is_passed_in()
     {
         $this->expectException(GuardDoesNotMatch::class);

@@ -4,11 +4,12 @@ namespace Spatie\Permission\Commands;
 
 use Illuminate\Console\Command;
 use Spatie\Permission\Contracts\Permission as PermissionContract;
+use Spatie\Permission\Guard;
 
 class CreatePermission extends Command
 {
-    protected $signature = 'permission:create-permission 
-                {name : The name of the permission} 
+    protected $signature = 'permission:create-permission
+                {name : The name of the permission}
                 {guard? : The name of the guard}';
 
     protected $description = 'Create a permission';
@@ -17,8 +18,8 @@ class CreatePermission extends Command
     {
         $permissionClass = app(PermissionContract::class);
 
-        $permission = $permissionClass::findOrCreate($this->argument('name'), $this->argument('guard'));
+        $permission = $permissionClass::firstOrCreate(['name' => $this->argument('name'), 'guard_name' => $this->argument('guard') ?? Guard::getDefaultName(config('permission.models.permission'))]);
 
-        $this->info("Permission `{$permission->name}` ".($permission->wasRecentlyCreated ? 'created' : 'already exists'));
+        $this->info("Permission `{$permission->name}` " . ($permission->wasRecentlyCreated ? 'created' : 'already exists'));
     }
 }

@@ -5,6 +5,7 @@ namespace Spatie\Permission\Commands;
 use Illuminate\Console\Command;
 use Spatie\Permission\Contracts\Permission as PermissionContract;
 use Spatie\Permission\Contracts\Role as RoleContract;
+use Spatie\Permission\Guard;
 use Spatie\Permission\PermissionRegistrar;
 
 class CreateRole extends Command
@@ -30,7 +31,7 @@ class CreateRole extends Command
             return;
         }
 
-        $role = $roleClass::findOrCreate($this->argument('name'), $this->argument('guard'));
+        $role = $roleClass::firstOrCreate(['name' => $this->argument('name'), 'guard_name' => $this->argument('guard') ?? Guard::getDefaultName(config('permission.models.role'))]);
         setPermissionsTeamId($teamIdAux);
 
         $teams_key = $permissionRegistrar->teamsKey;
@@ -59,7 +60,7 @@ class CreateRole extends Command
         $models = [];
 
         foreach ($permissions as $permission) {
-            $models[] = $permissionClass::findOrCreate(trim($permission), $this->argument('guard'));
+            $models[] = $permissionClass::firstOrCreate(['name' => trim($permission), 'guard_name' => $this->argument('guard') ?? Guard::getDefaultName(config('permission.models.role'))]);
         }
 
         return collect($models);

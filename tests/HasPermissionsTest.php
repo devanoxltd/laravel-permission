@@ -87,7 +87,7 @@ class HasPermissionsTest extends TestCase
     {
         $enum = TestModels\TestRolePermissionsEnum::VIEWARTICLES;
 
-        $permission = app(Permission::class)->findOrCreate($enum->value, 'web');
+        $permission = app(Permission::class)->firstOrCreate(['name' => $enum->value, 'guard_name' => 'web']);
 
         $this->testUser->givePermissionTo('all', $enum);
 
@@ -113,8 +113,8 @@ class HasPermissionsTest extends TestCase
     {
         $enum1 = TestModels\TestRolePermissionsEnum::VIEWARTICLES;
         $enum2 = TestModels\TestRolePermissionsEnum::EDITARTICLES;
-        $permission1 = app(Permission::class)->findOrCreate($enum1->value, 'web');
-        $permission2 = app(Permission::class)->findOrCreate($enum2->value, 'web');
+        $permission1 = app(Permission::class)->firstOrCreate(['name' => $enum1->value, 'guard_name' => 'web']);
+        $permission2 = app(Permission::class)->firstOrCreate(['name' => $enum2->value, 'guard_name' => 'web']);
 
         User::all()->each(fn ($item) => $item->delete());
         $user1 = User::create(['email' => 'user1@test.com']);

@@ -129,24 +129,6 @@ class Role extends Model implements RoleContract
     }
 
     /**
-     * Find or create role by its name (and optionally guardName).
-     *
-     * @return RoleContract|Role
-     */
-    public static function findOrCreate(string $name, ?string $guardName = null): RoleContract
-    {
-        $guardName ??= Guard::getDefaultName(static::class);
-
-        $role = static::findByParam(['name' => $name, 'guard_name' => $guardName]);
-
-        if (! $role) {
-            return static::query()->create(['name' => $name, 'guard_name' => $guardName] + (app(PermissionRegistrar::class)->teams ? [app(PermissionRegistrar::class)->teamsKey => getPermissionsTeamId()] : []));
-        }
-
-        return $role;
-    }
-
-    /**
      * Finds a role based on an array of parameters.
      *
      * @return RoleContract|Role|null

@@ -95,9 +95,9 @@ class WildcardHasPermissionsTest extends TestCase
         $postsEverything = TestModels\TestRolePermissionsEnum::WildcardPostsEverything;
         $postsCreate = TestModels\TestRolePermissionsEnum::WildcardPostsCreate;
 
-        $permission1 = app(Permission::class)->findOrCreate($articlesCreator->value, 'web');
-        $permission2 = app(Permission::class)->findOrCreate($newsEverything->value, 'web');
-        $permission3 = app(Permission::class)->findOrCreate($postsEverything->value, 'web');
+        $permission1 = app(Permission::class)->firstOrCreate(['name' => $articlesCreator->value, 'guard_name' => 'web']);
+        $permission2 = app(Permission::class)->firstOrCreate(['name' => $newsEverything->value, 'guard_name' => 'web']);
+        $permission3 = app(Permission::class)->firstOrCreate(['name' => $postsEverything->value, 'guard_name' => 'web']);
 
         $user1->givePermissionTo('all', [$permission1, $permission2, $permission3]);
 

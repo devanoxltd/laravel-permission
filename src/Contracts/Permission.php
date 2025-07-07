@@ -35,9 +35,4 @@ interface Permission
      * @throws \Spatie\Permission\Exceptions\PermissionDoesNotExist
      */
     public static function findById(int|string $id, ?string $guardName): self;
-
-    /**
-     * Find or Create a permission by its name and guard name.
-     */
-    public static function findOrCreate(string $name, ?string $guardName): self;
 }

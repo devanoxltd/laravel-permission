@@ -56,7 +56,7 @@ You must manually convert the name to its value in order to pass the correct str
 eg: use `RolesEnum::WRITER->value` when specifying the role/permission name
 
 ```php
-  $role = app(Role::class)->findOrCreate(RolesEnum::WRITER->value, 'web');
+  $role = app(Role::class)->firstOrCreate(['name' => RolesEnum::WRITER->value, 'guard_name' => 'web']);
 ```
 Same with creating Permissions.
 

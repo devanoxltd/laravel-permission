@@ -26,7 +26,7 @@ class HasRolesTest extends TestCase
     {
         $this->assertFalse($this->testUser->hasRole('testRole'));
 
-        $role = app(Role::class)->findOrCreate('testRoleInWebGuard', 'web');
+        $role = app(Role::class)->firstOrCreate(['name' => 'testRoleInWebGuard', 'guard_name' => 'web']);
 
         $this->assertFalse($this->testUser->hasRole($role));
 
@@ -43,7 +43,7 @@ class HasRolesTest extends TestCase
         $this->assertFalse($this->testUser->hasRole($role->getKey(), 'fakeGuard'));
         $this->assertFalse($this->testUser->hasRole([$role->getKey(), 'fakeRole'], 'fakeGuard'));
 
-        $role = app(Role::class)->findOrCreate('testRoleInWebGuard2', 'web');
+        $role = app(Role::class)->firstOrCreate(['name' => 'testRoleInWebGuard2', 'guard_name' => 'web']);
         $this->assertFalse($this->testUser->hasRole($role));
     }
 
@@ -61,10 +61,10 @@ class HasRolesTest extends TestCase
         $enum3 = TestModels\TestRolePermissionsEnum::CASTED_ENUM_1;
         $enum4 = TestModels\TestRolePermissionsEnum::CASTED_ENUM_2;
 
-        app(Role::class)->findOrCreate($enum1->value, 'web');
-        app(Role::class)->findOrCreate($enum2->value, 'web');
-        app(Role::class)->findOrCreate($enum3->value, 'web');
-        app(Role::class)->findOrCreate($enum4->value, 'web');
+        app(Role::class)->firstOrCreate(['name' => $enum1->value, 'guard_name' => 'web']);
+        app(Role::class)->firstOrCreate(['name' => $enum2->value, 'guard_name' => 'web']);
+        app(Role::class)->firstOrCreate(['name' => $enum3->value, 'guard_name' => 'web']);
+        app(Role::class)->firstOrCreate(['name' => $enum4->value, 'guard_name' => 'web']);
 
         $this->assertFalse($this->testUser->hasRole($enum1));
         $this->assertFalse($this->testUser->hasRole($enum2));
@@ -112,8 +112,8 @@ class HasRolesTest extends TestCase
     {
         $enum1 = TestModels\TestRolePermissionsEnum::USERMANAGER;
         $enum2 = TestModels\TestRolePermissionsEnum::WRITER;
-        $role1 = app(Role::class)->findOrCreate($enum1->value, 'web');
-        $role2 = app(Role::class)->findOrCreate($enum2->value, 'web');
+        $role1 = app(Role::class)->firstOrCreate(['name' => $enum1->value, 'guard_name' => 'web']);
+        $role2 = app(Role::class)->firstOrCreate(['name' => $enum2->value, 'guard_name' => 'web']);
 
         User::all()->each(fn ($item) => $item->delete());
         $user1 = User::create(['email' => 'user1@test.com']);
