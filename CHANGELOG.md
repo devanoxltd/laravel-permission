@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-permission` will be documented in this file
 
+## v1.4.0 - 2025-07-07
+
+**Full Changelog**: https://github.com/devanoxltd/laravel-permission/compare/v1.3.0...v1.4.0
+
 ## v1.3.0 - 2025-07-07
 
 **Full Changelog**: https://github.com/devanoxltd/laravel-permission/compare/v1.2.0...v1.3.0
