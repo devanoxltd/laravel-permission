@@ -129,7 +129,7 @@ abstract class TestCase extends Orchestra
         $app['config']->set('permission.column_names.permission_pivot_key', 'permission_test_id');
         $app['config']->set('view.paths', [__DIR__.'/resources/views']);
 
-        // ensure api guard exists (required since Laravel 8.55)
+        // ensure api guard exists, since we use it for testing multi-guard support
         $app['config']->set('auth.guards.api', ['driver' => 'session', 'provider' => 'users']);
 
         // Set-up admin guard
@@ -230,7 +230,7 @@ abstract class TestCase extends Orchestra
         $app['config']->set('auth.guards.api', ['driver' => 'passport', 'provider' => 'users']);
 
         // mimic passport:install (must load migrations using our own call to loadMigrationsFrom() else rollbacks won't occur, and migrations will be left in skeleton directory
-        $this->artisan('passport:keys');
+        // $this->artisan('passport:keys');
         $this->loadMigrationsFrom(__DIR__.'/../vendor/laravel/passport/database/migrations/');
         $provider = in_array('users', array_keys(config('auth.providers'))) ? 'users' : null;
         $this->artisan('passport:client', ['--personal' => true, '--name' => config('app.name').' Personal Access Client']);
