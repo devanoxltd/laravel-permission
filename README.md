@@ -8,11 +8,13 @@
 
 <h1>Associate users with permissions and roles</h1>
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-permission.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-permission)
-[![GitHub Tests Action Status](https://github.com/spatie/laravel-permission/actions/workflows/run-tests.yml/badge.svg)](https://github.com/spatie/laravel-permission/actions?query=workflow%3ATests+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-permission.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-permission)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/devanoxltd/laravel-permission.svg?style=flat-square)](https://packagist.org/packages/devanoxltd/laravel-permission)
+[![GitHub Tests Action Status](https://github.com/devanoxltd/laravel-permission/actions/workflows/run-tests.yml/badge.svg)](https://github.com/devanoxltd/laravel-permission/actions?query=workflow%3ATests+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/devanoxltd/laravel-permission.svg?style=flat-square)](https://packagist.org/packages/devanoxltd/laravel-permission)
     
 </div>
+
+> This package is a fork of the excellent [spatie/laravel-permission](https://github.com/spatie/laravel-permission) package. All credits for the original implementation go to Spatie and their contributors. We forked this package to add some additional features that we needed.
 
 ## Documentation, Installation, and Usage Instructions
 
@@ -38,6 +40,21 @@ Because all permissions will be registered on [Laravel's gate](https://laravel.c
 ```php
 $user->can('edit articles');
 ```
+
+## Extended Features (Devanox Fork)
+
+### Permission Types
+This fork introduces **Permission Types**, allowing you to qualify a permission with a specific type (e.g., `'own'`, `'add'`, `'all'`) to differentiate the scope of that permission.
+
+```php
+use Spatie\Permission\Enums\PermissionType;
+
+$user->givePermissionToWithType(PermissionType::Own, 'create_post');
+
+$user->hasPermissionWithType('create_post', PermissionType::Own); // true
+```
+
+Read more about this feature in our [Permission Types Documentation](docs/advanced-usage/permission-types.md).
 
 ## Support us
 
