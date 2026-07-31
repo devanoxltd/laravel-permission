@@ -315,7 +315,6 @@ trait HasPermissions
     /**
      * Determine if the model has any of the given permissions with the given type.
      *
-     * @param  PermissionType|string $permissionType
      * @param  string|int|array|Permission|Collection|BackedEnum  ...$permissions
      */
     public function hasAnyPermissionWithType(PermissionType|string $permissionType, ...$permissions): bool
@@ -334,7 +333,6 @@ trait HasPermissions
     /**
      * Determine if the model has all of the given permissions with the given type.
      *
-     * @param  PermissionType|string $permissionType
      * @param  string|int|array|Permission|Collection|BackedEnum  ...$permissions
      */
     public function hasAllPermissionsWithType(PermissionType|string $permissionType, ...$permissions): bool
@@ -583,8 +581,8 @@ trait HasPermissions
                 ->toArray();
 
             $newPermissions = array_diff($permissions, array_keys($currentPermissions));
-            
-            if (!empty($newPermissions)) {
+
+            if (! empty($newPermissions)) {
                 $attachData = array_fill_keys($newPermissions, [$permissionTypeColumn => $permissionType]);
                 $attachData = array_map(fn ($pivot) => $pivot + $teamPivot, $attachData);
                 $this->permissions()->attach($attachData);

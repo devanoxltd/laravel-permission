@@ -29,7 +29,7 @@ it('throws unauthorized exception if user does not have permission with type', f
     $this->middleware->handle($request, function () {
         return (new Response)->setContent('<html></html>');
     }, $this->testUserPermission->name, PermissionType::Own->value);
-})->throws(UnauthorizedException::class, "User does not have the right permissions.");
+})->throws(UnauthorizedException::class, 'User does not have the right permissions.');
 
 it('passes if user has permission with type directly', function () {
     Auth::login($this->testUser);

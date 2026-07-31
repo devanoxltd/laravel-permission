@@ -141,17 +141,17 @@ it('can scope users by permission regardless of type', function () {
 
 it('can get the assigned permission type', function () {
     $this->testUser->givePermissionToWithType(PermissionType::Own, $this->testUserPermission);
-    
+
     expect($this->testUser->getPermissionType($this->testUserPermission))->toBe(PermissionType::Own->value);
-    
+
     // Test via role
     $this->testUser->permissions()->detach();
     $this->testUser->unsetRelation('permissions');
     $this->testUserRole->givePermissionToWithType(PermissionType::Add, $this->testUserPermission);
     $this->testUser->assignRole($this->testUserRole);
-    
+
     expect($this->testUser->getPermissionType($this->testUserPermission))->toBe(PermissionType::Add->value);
-    
+
     // Unassigned
     $this->testUser->roles()->detach();
     $this->testUser->unsetRelation('roles');
@@ -160,16 +160,16 @@ it('can get the assigned permission type', function () {
 });
 
 it('can determine if user has any or all permissions with type', function () {
-    $permission2 = app(\Spatie\Permission\Contracts\Permission::class)::where('name', 'edit-news')->first();
-    
-    $this->testUser->givePermissionToWithType(\Spatie\Permission\PermissionType::Own, $this->testUserPermission);
-    $this->testUser->givePermissionToWithType(\Spatie\Permission\PermissionType::Add, $permission2);
-    
-    expect($this->testUser->hasAnyPermissionWithType(\Spatie\Permission\PermissionType::Own, $this->testUserPermission, $permission2))->toBeTrue();
-    expect($this->testUser->hasAnyPermissionWithType(\Spatie\Permission\PermissionType::All, $this->testUserPermission, $permission2))->toBeFalse();
-    
-    expect($this->testUser->hasAllPermissionsWithType(\Spatie\Permission\PermissionType::Own, $this->testUserPermission, $permission2))->toBeFalse();
-    
-    $this->testUser->givePermissionToWithType(\Spatie\Permission\PermissionType::Own, $permission2);
-    expect($this->testUser->hasAllPermissionsWithType(\Spatie\Permission\PermissionType::Own, $this->testUserPermission, $permission2))->toBeTrue();
+    $permission2 = app(Permission::class)::where('name', 'edit-news')->first();
+
+    $this->testUser->givePermissionToWithType(PermissionType::Own, $this->testUserPermission);
+    $this->testUser->givePermissionToWithType(PermissionType::Add, $permission2);
+
+    expect($this->testUser->hasAnyPermissionWithType(PermissionType::Own, $this->testUserPermission, $permission2))->toBeTrue();
+    expect($this->testUser->hasAnyPermissionWithType(PermissionType::All, $this->testUserPermission, $permission2))->toBeFalse();
+
+    expect($this->testUser->hasAllPermissionsWithType(PermissionType::Own, $this->testUserPermission, $permission2))->toBeFalse();
+
+    $this->testUser->givePermissionToWithType(PermissionType::Own, $permission2);
+    expect($this->testUser->hasAllPermissionsWithType(PermissionType::Own, $this->testUserPermission, $permission2))->toBeTrue();
 });
