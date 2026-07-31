@@ -91,7 +91,7 @@ class Role extends Model implements RoleContract
             Config::roleHasPermissionsTable(),
             $registrar->pivotRole,
             $registrar->pivotPermission
-        );
+        )->withPivot(Config::permissionTypeColumn());
     }
 
     /**

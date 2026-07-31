@@ -71,6 +71,9 @@ class PermissionServiceProvider extends PackageServiceProvider
 
         // permission checks
         $bladeCompiler->if('haspermission', fn () => $bladeMethodWrapper('checkPermissionTo', ...func_get_args()));
+        $bladeCompiler->if('haspermissionwithtype', fn ($permission, $type, $guard = null) => auth($guard)->check() && auth($guard)->user()->hasPermissionWithType($permission, $type, $guard));
+        $bladeCompiler->if('hasanypermissionwithtype', fn ($type, ...$permissions) => auth()->check() && auth()->user()->hasAnyPermissionWithType($type, ...$permissions));
+        $bladeCompiler->if('hasallpermissionswithtype', fn ($type, ...$permissions) => auth()->check() && auth()->user()->hasAllPermissionsWithType($type, ...$permissions));
 
         // role checks
         $bladeCompiler->if('role', fn () => $bladeMethodWrapper('hasRole', ...func_get_args()));
@@ -103,6 +106,14 @@ class PermissionServiceProvider extends PackageServiceProvider
 
             /** @var Route $this */
             return $this->middleware('permission:'.implode('|', $permissions));
+        });
+
+        Route::macro('permissionWithType', function ($permission, $type) {
+            $permission = enum_value($permission);
+            $type = enum_value($type);
+
+            /** @var Route $this */
+            return $this->middleware("permission_type:{$permission},{$type}");
         });
 
         Route::macro('roleOrPermission', function ($rolesOrPermissions = []) {

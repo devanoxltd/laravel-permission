@@ -76,7 +76,7 @@ class Permission extends Model implements PermissionContract
             Config::roleHasPermissionsTable(),
             $registrar->pivotPermission,
             $registrar->pivotRole
-        );
+        )->withPivot(Config::permissionTypeColumn());
     }
 
     /**
@@ -90,7 +90,7 @@ class Permission extends Model implements PermissionContract
             Config::modelHasPermissionsTable(),
             app(PermissionRegistrar::class)->pivotPermission,
             Config::morphKey()
-        );
+        )->withPivot(Config::permissionTypeColumn());
     }
 
     /**

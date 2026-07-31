@@ -19,6 +19,7 @@ use Spatie\Permission\Exceptions\WildcardPermissionInvalidArgument;
 use Spatie\Permission\Exceptions\WildcardPermissionNotImplementsContract;
 use Spatie\Permission\Guard;
 use Spatie\Permission\PermissionRegistrar;
+use Spatie\Permission\PermissionType;
 use Spatie\Permission\Support\Config;
 
 use function Illuminate\Support\enum_value;
@@ -91,12 +92,14 @@ trait HasPermissions
             app(PermissionRegistrar::class)->pivotPermission
         );
 
+        $permissionTypeColumn = Config::permissionTypeColumn();
+
         if (! Config::teamsEnabled()) {
-            return $relation;
+            return $relation->withPivot($permissionTypeColumn);
         }
 
         $teamsKey = Config::teamForeignKey();
-        $relation->withPivot($teamsKey);
+        $relation->withPivot($teamsKey, $permissionTypeColumn);
 
         return $relation->wherePivot($teamsKey, getPermissionsTeamId());
     }
@@ -296,6 +299,58 @@ trait HasPermissions
     }
 
     /**
+     * An alias to hasPermissionWithType(), but avoids throwing an exception.
+     *
+     * @param  string|int|Permission|BackedEnum  $permission
+     */
+    public function checkPermissionToWithType($permission, PermissionType|string $permissionType, ?string $guardName = null): bool
+    {
+        try {
+            return $this->hasPermissionWithType($permission, $permissionType, $guardName);
+        } catch (PermissionDoesNotExist $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Determine if the model has any of the given permissions with the given type.
+     *
+     * @param  PermissionType|string $permissionType
+     * @param  string|int|array|Permission|Collection|BackedEnum  ...$permissions
+     */
+    public function hasAnyPermissionWithType(PermissionType|string $permissionType, ...$permissions): bool
+    {
+        $permissions = collect($permissions)->flatten();
+
+        foreach ($permissions as $permission) {
+            if ($this->checkPermissionToWithType($permission, $permissionType)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Determine if the model has all of the given permissions with the given type.
+     *
+     * @param  PermissionType|string $permissionType
+     * @param  string|int|array|Permission|Collection|BackedEnum  ...$permissions
+     */
+    public function hasAllPermissionsWithType(PermissionType|string $permissionType, ...$permissions): bool
+    {
+        $permissions = collect($permissions)->flatten();
+
+        foreach ($permissions as $permission) {
+            if (! $this->checkPermissionToWithType($permission, $permissionType)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Determine if the model has, via roles, the given permission.
      */
     protected function hasPermissionViaRole(Permission $permission): bool
@@ -305,6 +360,89 @@ trait HasPermissions
         }
 
         return $this->hasRole($permission->roles);
+    }
+
+    /**
+     * Determine if the model may perform the given permission with the given type.
+     *
+     * @param  string|int|Permission|BackedEnum  $permission
+     *
+     * @throws PermissionDoesNotExist
+     */
+    public function hasPermissionWithType($permission, PermissionType|string $permissionType, ?string $guardName = null): bool
+    {
+        $permission = $this->filterPermission($permission, $guardName);
+        $permissionType = enum_value($permissionType);
+
+        return $this->hasDirectPermissionWithType($permission, $permissionType)
+            || $this->hasPermissionViaRoleWithType($permission, $permissionType);
+    }
+
+    /**
+     * Determine if the model has the given permission with the given type directly.
+     */
+    protected function hasDirectPermissionWithType(Permission $permission, string $permissionType): bool
+    {
+        return $this->loadMissing('permissions')
+            ->permissions
+            ->where('pivot.'.Config::permissionTypeColumn(), $permissionType)
+            ->contains($permission->getKeyName(), $permission->getKey());
+    }
+
+    /**
+     * Determine if the model has the given permission with the given type via roles.
+     */
+    protected function hasPermissionViaRoleWithType(Permission $permission, string $permissionType): bool
+    {
+        if ($this instanceof Role) {
+            return false;
+        }
+
+        $permission->load(['roles' => fn ($query) => $query->withPivot(Config::permissionTypeColumn())]);
+
+        $roleKey = (new ($this->getRoleClass())())->getKeyName();
+
+        $rolesWithPermissionOfType = $permission->roles
+            ->where('pivot.'.Config::permissionTypeColumn(), $permissionType)
+            ->pluck($roleKey);
+
+        return $this->hasRole($rolesWithPermissionOfType->all());
+    }
+
+    /**
+     * Get the assigned type for a given permission.
+     * Returns null if the permission is not assigned.
+     *
+     * @param  string|int|Permission|BackedEnum  $permission
+     */
+    public function getPermissionType($permission, ?string $guardName = null): ?string
+    {
+        $permission = $this->filterPermission($permission, $guardName);
+
+        // Check direct permissions
+        $directPermission = $this->loadMissing('permissions')
+            ->permissions
+            ->where($permission->getKeyName(), $permission->getKey())
+            ->first();
+
+        if ($directPermission) {
+            return $directPermission->pivot->{Config::permissionTypeColumn()};
+        }
+
+        // Check via roles
+        if (! $this instanceof Role) {
+            $permission->load(['roles' => fn ($query) => $query->withPivot(Config::permissionTypeColumn())]);
+
+            $roleKey = (new ($this->getRoleClass())())->getKeyName();
+
+            $rolesWithPermission = $permission->roles->whereIn($roleKey, $this->roles->pluck($roleKey));
+
+            if ($rolesWithPermission->isNotEmpty()) {
+                return $rolesWithPermission->first()->pivot->{Config::permissionTypeColumn()};
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -420,27 +558,59 @@ trait HasPermissions
      */
     public function givePermissionTo(...$permissions): static
     {
+        return $this->givePermissionToWithType(Config::permissionTypeDefault(), ...$permissions);
+    }
+
+    /**
+     * Grant the given permission(s) with an explicit type to the model.
+     *
+     * @param  string|int|array|Permission|Collection|BackedEnum  $permissions
+     * @return $this
+     */
+    public function givePermissionToWithType(PermissionType|string $permissionType, ...$permissions): static
+    {
+        $permissionType = enum_value($permissionType);
         $permissions = $this->collectPermissions($permissions);
 
         $model = $this->getModel();
         $teamPivot = app(PermissionRegistrar::class)->teams && ! $this instanceof Role ?
             [app(PermissionRegistrar::class)->teamsKey => getPermissionsTeamId()] : [];
+        $permissionTypeColumn = Config::permissionTypeColumn();
 
         if ($model->exists) {
-            $currentPermissions = $this->permissions->map(fn ($permission) => $permission->getKey())->toArray();
+            $currentPermissions = $this->permissions
+                ->mapWithKeys(fn ($permission) => [$permission->getKey() => $permission->pivot->{$permissionTypeColumn}])
+                ->toArray();
 
-            $this->permissions()->attach(array_diff($permissions, $currentPermissions), $teamPivot);
+            $newPermissions = array_diff($permissions, array_keys($currentPermissions));
+            
+            if (!empty($newPermissions)) {
+                $attachData = array_fill_keys($newPermissions, [$permissionTypeColumn => $permissionType]);
+                $attachData = array_map(fn ($pivot) => $pivot + $teamPivot, $attachData);
+                $this->permissions()->attach($attachData);
+            }
+
+            $existingPermissions = array_intersect($permissions, array_keys($currentPermissions));
+            foreach ($existingPermissions as $id) {
+                if ($currentPermissions[$id] !== $permissionType) {
+                    $this->permissions()->updateExistingPivot($id, [$permissionTypeColumn => $permissionType]);
+                }
+            }
+
             $model->unsetRelation('permissions');
         } else {
             $class = $model::class;
             $saved = false;
 
             $class::saved(
-                function ($object) use ($permissions, $model, $teamPivot, &$saved) {
+                function ($object) use ($permissions, $model, $permissionType, $teamPivot, $permissionTypeColumn, &$saved) {
                     if ($saved || $model->getKey() != $object->getKey()) {
                         return;
                     }
-                    $model->permissions()->attach($permissions, $teamPivot);
+                    $attachData = array_fill_keys($permissions, [$permissionTypeColumn => $permissionType]);
+                    $attachData = array_map(fn ($pivot) => $pivot + $teamPivot, $attachData);
+
+                    $model->permissions()->attach($attachData);
                     $model->unsetRelation('permissions');
                     $saved = true;
                 }
@@ -475,6 +645,19 @@ trait HasPermissions
      */
     public function syncPermissions(...$permissions): static
     {
+        return $this->syncPermissionsWithType(Config::permissionTypeDefault(), ...$permissions);
+    }
+
+    /**
+     * Remove all current permissions and set the given ones with an explicit type.
+     *
+     * @param  string|int|array|Permission|Collection|BackedEnum  $permissions
+     * @return $this
+     */
+    public function syncPermissionsWithType(PermissionType|string $permissionType, ...$permissions): static
+    {
+        $permissionType = enum_value($permissionType);
+
         if ($this->getModel()->exists) {
             $this->collectPermissions($permissions);
 
@@ -490,7 +673,7 @@ trait HasPermissions
             }
         }
 
-        return $this->givePermissionTo($permissions);
+        return $this->givePermissionToWithType($permissionType, $permissions);
     }
 
     /**

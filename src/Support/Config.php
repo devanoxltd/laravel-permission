@@ -74,6 +74,16 @@ class Config
         return app(PermissionRegistrar::class)->teamsKey;
     }
 
+    public static function permissionTypeColumn(): string
+    {
+        return config('permission.column_names.permission_type', 'permission_type');
+    }
+
+    public static function permissionTypeDefault(): string
+    {
+        return config('permission.permission_type_default', 'none');
+    }
+
     /**
      * @return class-string<Model>
      */

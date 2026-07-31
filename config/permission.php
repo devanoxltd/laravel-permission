@@ -96,6 +96,13 @@ return [
         'permission_pivot_key' => null, // default 'permission_id',
 
         /*
+         * Change this if you want to name the permission type pivot column other
+         * than `permission_type`.
+         */
+
+        'permission_type' => 'permission_type',
+
+        /*
          * Change this if you want to name the related model primary key other than
          * `model_id`.
          *
@@ -137,6 +144,14 @@ return [
      * To enable, set to true, and then create listeners to watch these events.
      */
     'events_enabled' => false,
+
+    /*
+     * The default permission type used when assigning permissions without an
+     * explicit type. This value is stored in the pivot column and can be used
+     * to scope permission checks to specific contexts.
+     */
+
+    'permission_type_default' => 'none',
 
     /*
      * Teams Feature.
