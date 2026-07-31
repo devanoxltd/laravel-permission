@@ -21,3 +21,8 @@ parameters:
         - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$roles#'
         # unreachable code in trait contexts is intentional — traits are used in multiple model contexts:
         - '#Unreachable statement - code above always terminates#'
+        # permission type feature methods and properties:
+        - '#Call to an undefined method Illuminate\\Contracts\\Auth\\Access\\Authorizable::hasPermissionWithType\(\)#'
+        - '#Call to an undefined method Illuminate\\Foundation\\Auth\\User::has(Any|All)?Permissions?WithType\(\)#'
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$pivot#'
+        - '#Access to an undefined property Spatie\\Permission\\Models\\(?:Role|Permission)::\$pivot#'

@@ -34,7 +34,7 @@ body:
           You can use `composer show` to get package version numbers:
   - type: input
     attributes:
-      label: "Version of spatie/laravel-permission package:"
+      label: "Version of devanoxltd/laravel-permission package:"
     validations:
       required: true
   - type: input
@@ -52,4 +52,4 @@ body:
       label: "Database engine and version:"
   - type: input
     attributes:
-      label: "OS: Windows/Mac/Linux version:" 
+      label: "OS: Windows/Mac/Linux version:"
