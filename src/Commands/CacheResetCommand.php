@@ -17,9 +17,9 @@ class CacheResetCommand extends Command
         $cacheExists = $permissionRegistrar->getCacheRepository()->has($permissionRegistrar->cacheKey);
 
         if ($permissionRegistrar->forgetCachedPermissions()) {
-            $this->info('Permission cache flushed.');
+            $this->info(__('permission::messages.permission_cache_flushed'));
         } elseif ($cacheExists) {
-            $this->error('Unable to flush cache.');
+            $this->error(__('permission::messages.unable_to_flush_cache'));
         }
 
         return self::SUCCESS;

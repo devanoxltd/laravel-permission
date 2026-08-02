@@ -604,9 +604,9 @@ The aim for v7 is to modernize the codebase while keeping the upgrade path easy.
 
 - Reset teamId on Octane by @erikn69 in https://github.com/spatie/laravel-permission/pull/2547
   NOTE: The `\Spatie\Permission\Listeners\OctaneReloadPermissions` listener introduced in 6.0.0 is removed in 6.1.0, because the logic is directly incorporated into the ServiceProvider now.
-  
+
   Thanks @jameshulse for the heads-up and code-review.
-  
+
 
 **Full Changelog**: https://github.com/spatie/laravel-permission/compare/6.0.1...6.1.0
 
@@ -1300,10 +1300,10 @@ The following changes are not "breaking", but worth making the updates to your a
 
 1. Config file: The `config/permission.php` file changed to move cache-related settings into a sub-array. **You should review the changes and merge the updates into your own config file.** Specifically the `expiration_time` value has moved into a sub-array entry, and the old top-level entry is no longer used.
 2. See the original config file here:
-3. https://github.com/spatie/laravel-permission/blob/main/config/permission.php
-4. 
+3. https://github.com/devanoxltd/laravel-permission/blob/main/config/permission.php
+4.
 5. Cache Resets: If your `app` or `tests` are clearing the cache by specifying the cache key, **it is better to use the built-in forgetCachedPermissions() method** so that it properly handles tagged cache entries. Here is the recommended change:
-6. 
+6.
 
 ```diff
 - app()['cache']->forget('spatie.permission.cache');

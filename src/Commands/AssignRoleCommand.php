@@ -26,14 +26,14 @@ class AssignRoleCommand extends Command
         $userModelClass = $this->argument('userModelNamespace');
 
         if (! $permissionRegistrar->teams && $this->option('team-id')) {
-            $this->warn('Teams feature disabled, argument --team-id has no effect. Either enable it in permissions config file or remove --team-id parameter');
+            $this->warn(__('permission::messages.teams_feature_disabled'));
 
             return self::SUCCESS;
         }
 
         // Validate that the model class exists and is instantiable
         if (! class_exists($userModelClass)) {
-            $this->error("User model class [{$userModelClass}] does not exist.");
+            $this->error(__('permission::messages.user_model_not_found', ['class' => $userModelClass]));
 
             return self::FAILURE;
         }
@@ -41,7 +41,7 @@ class AssignRoleCommand extends Command
         $user = (new $userModelClass)::find($userId);
 
         if (! $user) {
-            $this->error("User with ID {$userId} not found.");
+            $this->error(__('permission::messages.user_id_not_found', ['id' => $userId]));
 
             return self::FAILURE;
         }
@@ -58,7 +58,7 @@ class AssignRoleCommand extends Command
 
         setPermissionsTeamId($teamIdAux);
 
-        $this->info("Role `{$role->name}` assigned to user ID {$userId} successfully.");
+        $this->info(__('permission::messages.role_assigned_to_user', ['role' => $role->name, 'id' => $userId]));
 
         return self::SUCCESS;
     }

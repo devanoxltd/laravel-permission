@@ -38,7 +38,7 @@ sed -i '' 's/DB_DATABASE=/#DB_DATABASE=/' .env
 touch database/database.sqlite
 
 # Package
-composer require spatie/laravel-permission
+composer require devanoxltd/laravel-permission
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 git add .
 git commit -m "Add Spatie Laravel Permissions package"
@@ -182,7 +182,7 @@ Three users were created: tester@example.com, admin@example.com, superadmin@exam
 ```
 With the above code, when you login with each respective user, you will see different messages based on that access.
 
-Here's a routes example with Breeze and Laravel 11. 
+Here's a routes example with Breeze and Laravel 11.
 Edit `/routes/web.php`:
 ```diff
 -Route::middleware('auth')->group(function () {
@@ -204,7 +204,7 @@ To share your app on Github for easy collaboration:
 git remote add origin git@github.com:YOURUSERNAME/REPONAME.git
 git push -u origin main
 ```
-The above only needs to be done once. 
+The above only needs to be done once.
 
 - then add the rest of your code by making new commits:
 

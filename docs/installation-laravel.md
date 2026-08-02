@@ -15,12 +15,12 @@ See the "Prerequisites" documentation page for compatibility details.
 
 3. You can **install the package via composer**:
 
-        composer require spatie/laravel-permission
+        composer require devanoxltd/laravel-permission
 
 4. The Service Provider will automatically be registered; however, if you wish to manually register it, you can manually add the `Spatie\Permission\PermissionServiceProvider::class` service provider to the array in `bootstrap/providers.php`.
 
 
-5. **You should publish** [the migration](https://github.com/spatie/laravel-permission/blob/main/database/migrations/create_permission_tables.php.stub) and the [`config/permission.php` config file](https://github.com/spatie/laravel-permission/blob/main/config/permission.php) with:
+5. **You should publish** [the migration](https://github.com/devanoxltd/laravel-permission/blob/main/database/migrations/create_permission_tables.php.stub), the [`config/permission.php` config file](https://github.com/devanoxltd/laravel-permission/blob/main/config/permission.php), and the [translations files](https://github.com/devanoxltd/laravel-permission/tree/main/resources/lang/en) with:
 
     ```
     php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
@@ -30,7 +30,7 @@ See the "Prerequisites" documentation page for compatibility details.
 
    - **If you are using UUIDs**, see the Advanced section of the docs on UUID steps, before you continue. It explains some changes you may want to make to the migrations and config file before continuing. It also mentions important considerations after extending this package's models for UUID capability.
 
-   - **If you are going to use the TEAMS features** you must update your [`config/permission.php` config file](https://github.com/spatie/laravel-permission/blob/main/config/permission.php):
+   - **If you are going to use the TEAMS features** you must update your [`config/permission.php` config file](https://github.com/devanoxltd/laravel-permission/blob/main/config/permission.php):
        - must set `'teams' => true,`
        - and (optional) you may set `team_foreign_key` name in the config file if you want to use a custom foreign key in your database for teams
 
@@ -71,4 +71,30 @@ See the "Prerequisites" documentation page for compatibility details.
 
 You can view the default config file contents at:
 
-[https://github.com/spatie/laravel-permission/blob/main/config/permission.php](https://github.com/spatie/laravel-permission/blob/main/config/permission.php)
+[https://github.com/devanoxltd/laravel-permission/blob/main/config/permission.php](https://github.com/devanoxltd/laravel-permission/blob/main/config/permission.php)
+
+## Customizing Translations
+
+This package publishes translation files (`messages.php`, `exception.php`, and `migration.php`) to `resources/lang/en/` when you run the `vendor:publish` command. These files contain all the exception messages, command outputs, and UI strings used by the package.
+
+You can translate these messages into your application's supported languages or customize the wording as needed.
+
+## Upgrading Existing Installations
+
+If you have already installed the package and later decide you want to enable specific features, you can use the following Artisan commands to generate the missing migrations:
+
+### Teams Feature
+
+To add the required fields for the Teams feature to an existing installation:
+
+```bash
+php artisan permission:setup-teams
+```
+
+### Permission Types Feature
+
+To add the required fields for the Permission Types feature to an existing installation:
+
+```bash
+php artisan permission:setup-permission-type
+```

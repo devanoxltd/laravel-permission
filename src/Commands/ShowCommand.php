@@ -34,7 +34,7 @@ class ShowCommand extends Command
         }
 
         foreach ($guards as $guard) {
-            $this->info("Guard: $guard");
+            $this->info(__('permission::messages.guard_name', ['guard' => $guard]));
 
             $roles = $roleClass::whereGuardName($guard)
                 ->with('permissions')
@@ -55,7 +55,7 @@ class ShowCommand extends Command
 
             if ($teamsEnabled) {
                 $teams = $roles->groupBy($team_key)->values()->map(
-                    fn ($group, $id) => new TableCell('Team ID: '.($id ?: 'NULL'), ['colspan' => $group->count()])
+                    fn ($group, $id) => new TableCell(__('permission::messages.team_id', ['id' => $id ?: 'NULL']), ['colspan' => $group->count()])
                 );
             }
 

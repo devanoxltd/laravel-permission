@@ -394,7 +394,7 @@ trait HasRoles
             return $roles->intersect($guard ? $this->roles->where('guard_name', $guard) : $this->roles)->isNotEmpty();
         }
 
-        throw new TypeError('Unsupported type for $roles parameter to hasRole().');
+        throw new TypeError(__('permission::exception.unsupported_type_for_has_role'));
     }
 
     /**

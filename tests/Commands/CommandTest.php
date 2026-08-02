@@ -195,6 +195,81 @@ it('shows an error when the teams migration cannot be created', function () {
     expect(glob(database_path('migrations/*_add_teams_fields.php')))->toBeEmpty();
 });
 
+it('can setup permission type upgrade', function () {
+    $this->artisan('permission:setup-permission-type')
+        ->expectsQuestion('Proceed with the migration creation?', 'yes')
+        ->assertExitCode(0);
+
+    $matchingFiles = glob(database_path('migrations/*_add_permission_type_fields.php'));
+    expect(count($matchingFiles) > 0)->toBeTrue();
+
+    $AddPermissionTypeFields = require $matchingFiles[count($matchingFiles) - 1];
+    $AddPermissionTypeFields->up();
+    $AddPermissionTypeFields->up(); // test upgrade permission type migration fresh
+
+    // remove migration
+    foreach ($matchingFiles as $file) {
+        unlink($file);
+    }
+});
+
+it('can decline the permission type migration creation', function () {
+    $this->artisan('permission:setup-permission-type')
+        ->expectsConfirmation('Proceed with the migration creation?', 'no')
+        ->assertExitCode(0);
+
+    expect(glob(database_path('migrations/*_add_permission_type_fields.php')))->toBeEmpty();
+});
+
+it('warns when a permission type migration already exists', function () {
+    $existingMigration = database_path('migrations/0000_00_00_000000_add_permission_type_fields.php');
+    file_put_contents($existingMigration, '<?php');
+
+    $this->artisan('permission:setup-permission-type')
+        ->expectsOutputToContain('Setup permission type migration already exists.')
+        ->expectsConfirmation('Proceed with the migration creation?', 'no')
+        ->assertExitCode(0);
+
+    $matchingFiles = glob(database_path('migrations/*_add_permission_type_fields.php'));
+    foreach ($matchingFiles as $file) {
+        unlink($file);
+    }
+});
+
+it('warns when multiple permission type migrations already exist', function () {
+    $existingMigration1 = database_path('migrations/0000_00_00_000000_add_permission_type_fields.php');
+    $existingMigration2 = database_path('migrations/0000_00_00_000001_add_permission_type_fields.php');
+    file_put_contents($existingMigration1, '<?php');
+    file_put_contents($existingMigration2, '<?php');
+
+    $this->artisan('permission:setup-permission-type')
+        ->expectsOutputToContain('Setup permission type migrations already exist.')
+        ->expectsConfirmation('Proceed with the migration creation?', 'no')
+        ->assertExitCode(0);
+
+    $matchingFiles = glob(database_path('migrations/*_add_permission_type_fields.php'));
+    foreach ($matchingFiles as $file) {
+        unlink($file);
+    }
+});
+
+it('shows an error when the permission type migration cannot be created', function () {
+    $migrationPath = database_path('migrations');
+    $originalPermissions = fileperms($migrationPath) & 0777;
+    chmod($migrationPath, 0555);
+
+    try {
+        $this->artisan('permission:setup-permission-type')
+            ->expectsConfirmation('Proceed with the migration creation?', 'yes')
+            ->expectsOutputToContain("Couldn't create migration.")
+            ->assertExitCode(0);
+    } finally {
+        chmod($migrationPath, $originalPermissions);
+    }
+
+    expect(glob(database_path('migrations/*_add_permission_type_fields.php')))->toBeEmpty();
+});
+
 it('can show roles by teams', function () {
     config()->set('permission.teams', true);
     app(PermissionRegistrar::class)->initializeCache();

@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'guard_does_not_match' => 'The given role or permission should use guard `:expected` instead of `:given`.',
+    'permission_already_exists' => 'A `:permission` permission already exists for guard `:guard`.',
+    'permission_does_not_exist' => 'There is no permission named `:permission` for guard `:guard`.',
+    'permission_does_not_exist_with_id' => 'There is no [permission] with ID `:id` for guard `:guard`.',
+    'permission_does_not_exist_generic' => 'Permission does not exist.',
+    'role_already_exists' => 'A role `:role` already exists for guard `:guard`.',
+    'role_does_not_exist' => 'There is no role named `:role` for guard `:guard`.',
+    'role_does_not_exist_with_id' => 'There is no role with ID `:id` for guard `:guard`.',
+    'unsupported_type_for_has_role' => 'Unsupported type for $roles parameter to hasRole().',
+    'team_model_not_configured' => 'No team model configured. Set `models.team` in your permission config file.',
+    'teams_not_enabled' => 'The teams feature is not enabled. Set `teams` to `true` in your permission config file.',
+    'wildcard_permission_invalid_argument' => 'Wildcard permission must be string, permission id or permission instance',
+    'wildcard_permission_not_implements_contract' => 'Wildcard permission class must implement Spatie\Permission\Contracts\Wildcard contract',
+    'wildcard_permission_not_properly_formatted' => 'Wildcard permission `:permission` is not properly formatted.',
+    'unauthorized' => 'User does not have the right roles.',
+    'unauthorized_permissions' => 'User does not have the right permissions.',
+    'unauthorized_roles_or_permissions' => 'User does not have any of the necessary access rights.',
+    'necessary_roles_are' => 'Necessary roles are :roles',
+    'necessary_permissions_are' => 'Necessary permissions are :permissions',
+    'necessary_roles_or_permissions_are' => 'Necessary roles or permissions are :values',
+    'authorizable_class_must_use_has_roles_trait' => 'Authorizable class `:class` must use Spatie\Permission\Traits\HasRoles trait.',
+    'user_is_not_logged_in' => 'User is not logged in.',
+];

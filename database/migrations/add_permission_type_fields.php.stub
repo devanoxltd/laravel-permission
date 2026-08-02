@@ -19,7 +19,7 @@ return new class extends Migration
         $permissionType = $columnNames['permission_type'] ?? 'permission_type';
         $permissionTypeDefault = config('permission.permission_type_default', 'none');
 
-        throw_if(empty($tableNames), 'Error: config/permission.php not loaded. Run [php artisan config:clear] and try again.');
+        throw_if(empty($tableNames), __('permission::migration.config_not_loaded'));
 
         if (! Schema::hasColumn($tableNames['model_has_permissions'], $permissionType)) {
             Schema::table($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames, $columnNames, $pivotPermission, $permissionType, $permissionTypeDefault) {

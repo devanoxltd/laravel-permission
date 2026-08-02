@@ -26,7 +26,7 @@ class CreateRoleCommand extends Command
         setPermissionsTeamId($this->option('team-id') ?: null);
 
         if (! $permissionRegistrar->teams && $this->option('team-id')) {
-            $this->warn('Teams feature disabled, argument --team-id has no effect. Either enable it in permissions config file or remove --team-id parameter');
+            $this->warn(__('permission::messages.teams_feature_disabled'));
 
             return self::SUCCESS;
         }
@@ -36,12 +36,12 @@ class CreateRoleCommand extends Command
 
         $teams_key = $permissionRegistrar->teamsKey;
         if ($permissionRegistrar->teams && $this->option('team-id') && is_null($role->$teams_key)) {
-            $this->warn("Role `{$role->name}` already exists on the global team; argument --team-id has no effect");
+            $this->warn(__('permission::messages.role_already_exists_global_team', ['role' => $role->name]));
         }
 
         $role->givePermissionTo($this->makePermissions($this->argument('permissions')));
 
-        $this->info("Role `{$role->name}` ".($role->wasRecentlyCreated ? 'created' : 'updated'));
+        $this->info($role->wasRecentlyCreated ? __('permission::messages.role_created', ['role' => $role->name]) : __('permission::messages.role_updated', ['role' => $role->name]));
 
         return self::SUCCESS;
     }

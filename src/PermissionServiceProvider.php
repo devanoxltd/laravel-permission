@@ -26,6 +26,7 @@ class PermissionServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-permission')
             ->hasConfigFile('permission')
+            ->hasTranslations()
             ->hasMigrations(['create_permission_tables'])
             ->hasCommands([
                 Commands\CacheResetCommand::class,
@@ -33,6 +34,7 @@ class PermissionServiceProvider extends PackageServiceProvider
                 Commands\CreatePermissionCommand::class,
                 Commands\ShowCommand::class,
                 Commands\UpgradeForTeamsCommand::class,
+                Commands\UpgradeForPermissionTypeCommand::class,
                 Commands\AssignRoleCommand::class,
             ]);
     }

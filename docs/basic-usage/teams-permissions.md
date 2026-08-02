@@ -9,7 +9,7 @@ When enabled, teams permissions offers you flexible control for a variety of sce
 
 NOTE: These configuration changes must be made **before** performing the migration when first installing the package.
 
-If you have already run the migration and want to upgrade your implementation, you can run the artisan console command `php artisan permission:setup-teams`, to create a new migration file named [`xxxx_xx_xx_xx_add_teams_fields.php`](https://github.com/spatie/laravel-permission/blob/main/database/migrations/add_teams_fields.php.stub) and then run `php artisan migrate` to upgrade your database tables.
+If you have already run the migration and want to upgrade your implementation, you can run the artisan console command `php artisan permission:setup-teams`, to create a new migration file named [`xxxx_xx_xx_xx_add_teams_fields.php`](https://github.com/devanoxltd/laravel-permission/blob/main/database/migrations/add_teams_fields.php.stub) and then run `php artisan migrate` to upgrade your database tables.
 
 Teams permissions can be enabled in the permission config file:
 
@@ -26,9 +26,9 @@ Also, if you want to use a custom foreign key for teams you set it in the permis
 
 ## Working with Teams Permissions
 
-After implementing a solution for selecting a team on the authentication process 
-(for example, setting the `team_id` of the currently selected team on the **session**: `session(['team_id' => $team->team_id]);` ), 
-we can set global `team_id` from anywhere, but works better if you create a `Middleware`. 
+After implementing a solution for selecting a team on the authentication process
+(for example, setting the `team_id` of the currently selected team on the **session**: `session(['team_id' => $team->team_id]);` ),
+we can set global `team_id` from anywhere, but works better if you create a `Middleware`.
 
 Example Team Middleware:
 
@@ -44,10 +44,10 @@ class TeamsPermission
         }
         // other custom ways to get team_id
         /*if(!empty(auth('api')->user())){
-            // `getTeamIdFromToken()` example of custom method for getting the set team_id 
+            // `getTeamIdFromToken()` example of custom method for getting the set team_id
             setPermissionsTeamId(auth('api')->user()->getTeamIdFromToken());
         }*/
-        
+
         return $next($request);
     }
 }
@@ -82,14 +82,14 @@ class AppServiceProvider extends ServiceProvider
     }
 }
 ```
-### Using LiveWire? 
+### Using LiveWire?
 
 You may need to register your team middleware as Persisted in Livewire. See [Livewire docs: Configuring Persistent Middleware](https://livewire.laravel.com/docs/security#configuring-persistent-middleware)
 
 ## Roles Creating
 
 When creating a role you can pass the `team_id` as an optional parameter
- 
+
 ```php
 // with null team_id it creates a global role; global roles can be assigned to any team and they are unique
 Role::create(['name' => 'writer', 'team_id' => null]);
@@ -138,7 +138,7 @@ $user->can('bar');
 
 ## Defining a Super-Admin on Teams
 
-Global roles can be assigned to different teams, and `team_id` (which is the primary key of the relationships) is always required. 
+Global roles can be assigned to different teams, and `team_id` (which is the primary key of the relationships) is always required.
 
 If you want a "Super Admin" global role for a user, when you create a new team you must assign it to your user. Example:
 

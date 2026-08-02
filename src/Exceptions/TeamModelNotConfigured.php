@@ -8,6 +8,6 @@ class TeamModelNotConfigured extends RuntimeException
 {
     public static function create(): static
     {
-        return new static(__('No team model configured. Set `models.team` in your permission config file.'));
+        return new static(__('permission::exception.team_model_not_configured'));
     }
 }

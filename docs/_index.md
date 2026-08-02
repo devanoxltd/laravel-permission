@@ -1,6 +1,6 @@
 ---
 title: v8
 slogan: Associate users with roles and permissions
-githubUrl: https://github.com/spatie/laravel-permission
+githubUrl: https://github.com/devanoxltd/laravel-permission
 branch: main
 ---

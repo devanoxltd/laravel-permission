@@ -7,7 +7,7 @@ description: Build and work with Spatie Laravel Permission features, including r
 
 ## When to use this skill
 
-Use this skill when working with authorization, roles, permissions, access control, middleware guards, or Blade permission directives using spatie/laravel-permission.
+Use this skill when working with authorization, roles, permissions, access control, middleware guards, or Blade permission directives using devanoxltd/laravel-permission.
 
 ## Core Concepts
 

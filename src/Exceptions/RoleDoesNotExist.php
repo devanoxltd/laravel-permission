@@ -8,7 +8,7 @@ class RoleDoesNotExist extends InvalidArgumentException
 {
     public static function named(string $roleName, ?string $guardName): static
     {
-        return new static(__('There is no role named `:role` for guard `:guard`.', [
+        return new static(__('permission::exception.role_does_not_exist', [
             'role' => $roleName,
             'guard' => $guardName,
         ]));
@@ -16,7 +16,7 @@ class RoleDoesNotExist extends InvalidArgumentException
 
     public static function withId(int|string $roleId, ?string $guardName): static
     {
-        return new static(__('There is no role with ID `:id` for guard `:guard`.', [
+        return new static(__('permission::exception.role_does_not_exist_with_id', [
             'id' => $roleId,
             'guard' => $guardName,
         ]));

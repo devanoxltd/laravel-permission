@@ -14,10 +14,10 @@ class UnauthorizedException extends HttpException
 
     public static function forRoles(array $roles): static
     {
-        $message = __('User does not have the right roles.');
+        $message = __('permission::exception.unauthorized');
 
         if (Config::displayRoleInException()) {
-            $message .= ' '.__('Necessary roles are :roles', ['roles' => implode(', ', $roles)]);
+            $message .= ' '.__('permission::exception.necessary_roles_are', ['roles' => implode(', ', $roles)]);
         }
 
         $exception = new static(403, $message, null, []);
@@ -28,10 +28,10 @@ class UnauthorizedException extends HttpException
 
     public static function forPermissions(array $permissions): static
     {
-        $message = __('User does not have the right permissions.');
+        $message = __('permission::exception.unauthorized_permissions');
 
         if (Config::displayPermissionInException()) {
-            $message .= ' '.__('Necessary permissions are :permissions', ['permissions' => implode(', ', $permissions)]);
+            $message .= ' '.__('permission::exception.necessary_permissions_are', ['permissions' => implode(', ', $permissions)]);
         }
 
         $exception = new static(403, $message, null, []);
@@ -42,10 +42,10 @@ class UnauthorizedException extends HttpException
 
     public static function forRolesOrPermissions(array $rolesOrPermissions): static
     {
-        $message = __('User does not have any of the necessary access rights.');
+        $message = __('permission::exception.unauthorized_roles_or_permissions');
 
         if (Config::displayPermissionInException() && Config::displayRoleInException()) {
-            $message .= ' '.__('Necessary roles or permissions are :values', ['values' => implode(', ', $rolesOrPermissions)]);
+            $message .= ' '.__('permission::exception.necessary_roles_or_permissions_are', ['values' => implode(', ', $rolesOrPermissions)]);
         }
 
         $exception = new static(403, $message, null, []);
@@ -56,14 +56,14 @@ class UnauthorizedException extends HttpException
 
     public static function missingTraitHasRoles(Authorizable $user): static
     {
-        return new static(403, __('Authorizable class `:class` must use Spatie\\Permission\\Traits\\HasRoles trait.', [
+        return new static(403, __('permission::exception.authorizable_class_must_use_has_roles_trait', [
             'class' => $user::class,
         ]), null, []);
     }
 
     public static function notLoggedIn(): static
     {
-        return new static(403, __('User is not logged in.'), null, []);
+        return new static(403, __('permission::exception.user_is_not_logged_in'), null, []);
     }
 
     public function getRequiredRoles(): array

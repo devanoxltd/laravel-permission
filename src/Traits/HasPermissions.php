@@ -193,7 +193,7 @@ trait HasPermissions
         }
 
         if (! $permission instanceof Permission) {
-            throw new PermissionDoesNotExist;
+            throw new PermissionDoesNotExist(__('permission::exception.permission_does_not_exist_generic'));
         }
 
         return $permission;
