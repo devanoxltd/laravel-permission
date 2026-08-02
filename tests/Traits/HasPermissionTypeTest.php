@@ -119,6 +119,14 @@ it('exposes the permission type on the permissions relation pivot', function () 
     expect($permission->pivot->{Config::permissionTypeColumn()})->toBe(PermissionType::Both->value);
 });
 
+it('can get the permission type directly from the permission model via the accessor', function () {
+    $this->testUser->givePermissionToWithType(PermissionType::Both, $this->testUserPermission);
+
+    $permission = $this->testUser->permissions->first();
+
+    expect($permission->permission_type)->toBe(PermissionType::Both->value);
+});
+
 it('exposes the permission type on the role permissions relation pivot', function () {
     $this->testUserRole->givePermissionToWithType(PermissionType::Add, $this->testUserPermission);
 

@@ -15,6 +15,7 @@ use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\Support\Config;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Traits\RefreshesPermissionCache;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 use function Illuminate\Support\enum_value;
 
@@ -168,5 +169,15 @@ class Permission extends Model implements PermissionContract
     {
         /** @var PermissionContract|null */
         return static::getPermissions($params, true)->first();
+    }
+
+    /**
+     * Get the permission type from the pivot table if available.
+     */
+    protected function permissionType(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->pivot ? $this->pivot->{Config::permissionTypeColumn()} : null,
+        );
     }
 }
