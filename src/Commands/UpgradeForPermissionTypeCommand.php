@@ -3,7 +3,6 @@
 namespace Spatie\Permission\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Config;
 
 class UpgradeForPermissionTypeCommand extends Command
 {
