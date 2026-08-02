@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-permission` will be documented in this file
 
+## 8.3.02 - 2026-08-02
+
+Added a permissionType accessor to the Permission model so that you can directly access the permission type without needing to go through the pivot object.
+
+You can now get the permission type directly on the permission object like this:
+
+```php
+$permission->permission_type; 
+
+```
+**Full Changelog**: https://github.com/devanoxltd/laravel-permission/compare/8.3.01...8.3.02
+
 ## 8.3.01 - 2026-08-02
 
 Add translation support
@@ -47,6 +59,7 @@ hasAnyRole("'writer|admin'")     // same
 hasAnyRole('"writer|admin"')     // same
 hasAnyRole("'writer|admin")      // changed: mismatched apostrophe is removed
 hasAnyRole("'writer|admin\"")    // changed: mismatched quote is removed
+
 
 
 
@@ -1370,6 +1383,7 @@ The following changes are not "breaking", but worth making the updates to your a
 
 
 
+
 ```
 1. Also this is a good time to point out that now with v2.25.0 and v2.26.0 most permission-cache-reset scenarios may no longer be needed in your app, so it's worth reviewing those cases, as you may gain some app speed improvement by removing unnecessary cache resets.
 
@@ -1417,6 +1431,7 @@ The following changes are not "breaking", but worth making the updates to your a
 @elserole('roleB')
  // user hasRole 'roleB' but not 'roleA'
 @endrole
+
 
 
 
